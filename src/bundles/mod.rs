@@ -7,7 +7,7 @@ use bevy::sprite::SpriteBundle;
 
 extern crate lazy_static;
 
-const HEX_SIZE: i32 = 32;
+const HEX_SIZE: f32 = (32.0 / 2.0) * 1.1;
 
 #[derive(Bundle)]
 pub struct Hex {

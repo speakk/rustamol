@@ -1,3 +1,3 @@
-mod map;
+pub mod map;
 
 pub use map::*;
