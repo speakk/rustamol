@@ -11,3 +11,6 @@ pub struct MapCoordinates {
     pub q: i32,
     pub r: i32,
 }
+
+#[derive(Component)]
+pub struct Layer(pub i32);

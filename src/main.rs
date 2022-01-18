@@ -5,6 +5,7 @@ use bevy::prelude::*;
 mod bundles;
 mod components;
 mod models;
+mod systems;
 
 fn setup(
     mut commands: Commands,
@@ -26,7 +27,7 @@ fn setup(
     windows
         .get_primary_mut()
         .unwrap()
-        .update_scale_factor_from_backend(1.0);
+        .update_scale_factor_from_backend(2.0);
 }
 
 fn main() {
@@ -35,5 +36,6 @@ fn main() {
         .add_event::<bundles::SpawnHex>()
         .add_system(bundles::create_hex_system)
         .add_startup_system(setup)
+        .add_system(systems::z_order)
         .run();
 }
