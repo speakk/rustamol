@@ -13,4 +13,7 @@ pub struct MapCoordinates {
 }
 
 #[derive(Component)]
+pub struct Hex();
+
+#[derive(Component)]
 pub struct Layer(pub i32);

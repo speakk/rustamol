@@ -33,9 +33,12 @@ fn setup(
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
+        .init_resource::<systems::hex_map::CoordinatesToHex>()
         .add_event::<bundles::SpawnHex>()
         .add_system(bundles::create_hex_system)
         .add_startup_system(setup)
         .add_system(systems::z_order)
+        .add_system(systems::hex_map)
+        .add_system(systems::hex_hilight)
         .run();
 }
