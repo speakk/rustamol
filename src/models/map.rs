@@ -48,14 +48,42 @@ pub fn pointy_hex_to_pixel(q: i32, r: i32) -> Transform {
     Transform::from_xyz(x, y, 0.0)
 }
 
-pub fn pixel_to_pointy_hex(x: f32, y: f32, origin_x: f32, origin_y: f32) -> Hex {
-    let final_x: f32 = (x - origin_x) / HEX_LAYOUT_SIZE_X;
-    let final_y: f32 = (y - origin_y) / HEX_LAYOUT_SIZE_Y;
-    let q: i32 = (POINTY_HEX_MATRIX.b0 * final_x + POINTY_HEX_MATRIX.b1 * final_y) as i32;
-    let r: i32 = (POINTY_HEX_MATRIX.b2 * final_x + POINTY_HEX_MATRIX.b3 * final_y) as i32;
+pub fn axial_round(fraq_q: f32, fraq_r: f32) -> Hex {
+    let fraq_s = -fraq_q - fraq_r;
+    let mut q = fraq_q.round();
+    let mut r = fraq_r.round();
+    let s = fraq_s.round();
 
-    Hex { q, r }
+    let q_diff = (q - fraq_q).abs();
+    let r_diff = (r - fraq_r).abs();
+    let s_diff = (s - fraq_s).abs();
+
+    if q_diff > r_diff && q_diff > s_diff {
+        q = -r - s;
+    } else if r_diff > s_diff {
+        r = -q - s;
+    }
+
+    return Hex {
+        q: q as i32,
+        r: r as i32,
+    };
 }
+
+pub fn pixel_to_pointy_hex(x: f32, y: f32) -> Hex {
+    let q = (3.0_f32.sqrt() / 3.0 * x - 1.0 / 3.0 * y) / HEX_LAYOUT_SIZE_X;
+    let r = (2.0 / 3.0 * y) / HEX_LAYOUT_SIZE_Y;
+    return axial_round(q, r);
+}
+
+// pub fn pixel_to_pointy_hex(x: f32, y: f32, origin_x: f32, origin_y: f32) -> Hex {
+//     let final_x: f32 = (x - origin_x) / HEX_LAYOUT_SIZE_X;
+//     let final_y: f32 = (y - origin_y) / HEX_LAYOUT_SIZE_Y;
+//     let q: i32 = (POINTY_HEX_MATRIX.b0 * final_x + POINTY_HEX_MATRIX.b1 * final_y).round() as i32;
+//     let r: i32 = (POINTY_HEX_MATRIX.b2 * final_x + POINTY_HEX_MATRIX.b3 * final_y).round() as i32;
+//
+//     Hex { q, r }
+// }
 
 pub enum MapShape {
     Hexagonal,

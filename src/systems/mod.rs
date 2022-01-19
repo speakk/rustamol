@@ -6,3 +6,6 @@ pub use hex_hilight::*;
 
 pub mod hex_map;
 pub use hex_map::*;
+
+pub mod mouse_world_coordinates;
+pub use mouse_world_coordinates::*;

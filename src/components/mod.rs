@@ -13,7 +13,10 @@ pub struct MapCoordinates {
 }
 
 #[derive(Component)]
-pub struct Hex();
+pub struct Hex;
 
 #[derive(Component)]
 pub struct Layer(pub i32);
+
+#[derive(Component)]
+pub struct MainCamera;

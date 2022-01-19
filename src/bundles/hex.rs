@@ -34,7 +34,7 @@ pub fn create_hex_system(
 ) {
     for ev in spawn_hex_event.iter() {
         commands.spawn_bundle(Hex {
-            hex: components::Hex(),
+            hex: components::Hex,
             position: Position { x: 0.0, y: 0.0 },
             coordinates: MapCoordinates { q: ev.q, r: ev.r },
             layer: Layer(4),

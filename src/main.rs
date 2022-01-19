@@ -1,3 +1,4 @@
+use crate::components::MainCamera;
 use bevy::prelude::*;
 
 #[macro_use]
@@ -12,7 +13,9 @@ fn setup(
     mut windows: ResMut<Windows>,
     mut spawn_hex: EventWriter<bundles::SpawnHex>,
 ) {
-    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+    commands
+        .spawn_bundle(OrthographicCameraBundle::new_2d())
+        .insert(MainCamera);
     // spawn_hex.send(bundles::SpawnHex { q: 3, r: 4 });
     // spawn_hex.send(bundles::SpawnHex { q: 0, r: 4 });
     let hexes = models::map::create_grid(8, models::MapShape::Hexagonal);
@@ -34,7 +37,9 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .init_resource::<systems::hex_map::CoordinatesToHex>()
+        .init_resource::<systems::mouse_world_coordinates::MouseWorldCoordinates>()
         .add_event::<bundles::SpawnHex>()
+        .add_system(systems::mouse_world_coordinates)
         .add_system(bundles::create_hex_system)
         .add_startup_system(setup)
         .add_system(systems::z_order)
