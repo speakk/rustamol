@@ -8,7 +8,7 @@ pub struct Position {
     pub y: f32,
 }
 
-#[derive(Component, Hash, Eq, PartialEq, Debug)]
+#[derive(Component, Hash, Eq, PartialEq, Debug, Clone, Copy)]
 pub struct Coordinates {
     pub q: i32,
     pub r: i32,
@@ -31,3 +31,6 @@ pub struct Unit;
 
 #[derive(Component)]
 pub struct Origin(pub Vec3);
+
+#[derive(Component)]
+pub struct Selected;

@@ -30,6 +30,17 @@ lazy_static::lazy_static! {
     };
 }
 
+lazy_static::lazy_static! {
+    pub static ref NEIGHBOR_DIRECTIONS: Vec<Coordinates> = vec![
+        Coordinates { q: 1, r: 0 },
+        Coordinates { q: 1, r: -1 },
+        Coordinates { q: 0, r: -1 },
+        Coordinates { q: -1, r: 0 },
+        Coordinates { q: -1, r: 1 },
+        Coordinates { q: 0, r: 1 },
+    ];
+}
+
 pub fn axial_distance(a: Coordinates, b: Coordinates) -> i32 {
     ((a.q - b.q).abs() + (a.q + a.r - b.q - b.r).abs() + (a.r - b.r).abs()) / 2
 }

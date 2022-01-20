@@ -41,6 +41,7 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .init_resource::<systems::hex_map::CoordinatesToHex>()
         .init_resource::<systems::hex_map::HexOccupants>()
+        .init_resource::<systems::path_hilight::HilightedPath>()
         .init_resource::<systems::mouse_world_coordinates::MouseWorldCoordinates>()
         .add_event::<bundles::SpawnHex>()
         .add_event::<bundles::SpawnUnit>()
@@ -52,6 +53,9 @@ fn main() {
         .add_startup_system(setup)
         .add_system(systems::z_order)
         .add_system(systems::hex_map)
+        .add_system(systems::selected)
+        .add_system(systems::find_path_hilight)
+        .add_system(systems::path_hilight)
         .add_system(systems::handle_hex_occupants)
         .add_system(systems::hex_hilight)
         .add_system_set(

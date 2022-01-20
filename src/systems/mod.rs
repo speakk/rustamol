@@ -18,3 +18,9 @@ pub use move_entity_to_coordinates::*;
 
 pub mod click_handler;
 pub use click_handler::*;
+
+pub mod selected;
+pub use selected::*;
+
+pub mod path_hilight;
+pub use path_hilight::*;
