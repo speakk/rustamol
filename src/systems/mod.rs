@@ -9,3 +9,6 @@ pub use hex_map::*;
 
 pub mod mouse_world_coordinates;
 pub use mouse_world_coordinates::*;
+
+pub mod color_fade;
+pub use color_fade::*;

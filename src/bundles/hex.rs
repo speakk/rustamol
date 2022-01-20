@@ -1,3 +1,4 @@
+use crate::components::ColorFade;
 use crate::components::Layer;
 use crate::components::MapCoordinates;
 use crate::components::Position;
@@ -16,6 +17,7 @@ pub struct Hex {
     pub position: Position,
     pub coordinates: MapCoordinates,
     pub layer: Layer,
+    pub color_fade: ColorFade,
     pub hex: components::Hex,
 
     #[bundle]
@@ -43,6 +45,7 @@ pub fn create_hex_system(
                 transform: pointy_hex_to_pixel(ev.q, ev.r),
                 ..Default::default()
             },
+            color_fade: ColorFade(Color::WHITE),
         });
     }
 }

@@ -1,4 +1,5 @@
 use bevy::ecs::component::Component;
+use bevy::render::color::Color;
 
 #[derive(Component)]
 pub struct Position {
@@ -20,3 +21,6 @@ pub struct Layer(pub i32);
 
 #[derive(Component)]
 pub struct MainCamera;
+
+#[derive(Component)]
+pub struct ColorFade(pub Color);
