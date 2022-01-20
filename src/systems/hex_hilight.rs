@@ -14,7 +14,8 @@ pub fn hex_hilight(
     if let Some(entity) = coordinates_to_hex.get(&coordinates) {
         if let Ok(mut sprite) = query.get_mut(*entity) {
             sprite.color.set_r(1.0);
-            sprite.color.set_g(0.0);
+            sprite.color.set_g(0.6);
+            sprite.color.set_b(0.6);
         }
     }
 }

@@ -32,6 +32,7 @@ const TIME_STEP: f32 = 1.0 / 60.0;
 
 fn main() {
     App::new()
+        .insert_resource(ClearColor(Color::rgb(0.2, 0.15, 0.23)))
         .add_plugins(DefaultPlugins)
         .init_resource::<systems::hex_map::CoordinatesToHex>()
         .init_resource::<systems::mouse_world_coordinates::MouseWorldCoordinates>()
