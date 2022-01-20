@@ -12,3 +12,6 @@ pub use mouse_world_coordinates::*;
 
 pub mod color_fade;
 pub use color_fade::*;
+
+pub mod move_entity_to_coordinates;
+pub use move_entity_to_coordinates::*;

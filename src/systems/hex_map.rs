@@ -21,13 +21,4 @@ pub fn hex_map(
             entity,
         );
     }
-    //for (mut transform, mut sprite, _) in hexes.iter_mut() {}
-    // for (mut transform, layer, _) in sprites.iter_mut() {
-    //     // TODO: Fix magic number
-    //     transform.translation.z = 10.0 + -transform.translation.y * 0.01;
-
-    //     if let Some(layer) = layer {
-    //         transform.translation.z += layer.0 as f32;
-    //     }
-    // }
 }

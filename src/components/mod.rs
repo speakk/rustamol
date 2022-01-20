@@ -1,4 +1,5 @@
 use bevy::ecs::component::Component;
+use bevy::math::Vec3;
 use bevy::render::color::Color;
 
 #[derive(Component)]
@@ -24,3 +25,9 @@ pub struct MainCamera;
 
 #[derive(Component)]
 pub struct ColorFade(pub Color);
+
+#[derive(Component)]
+pub struct Unit;
+
+#[derive(Component)]
+pub struct Origin(pub Vec3);

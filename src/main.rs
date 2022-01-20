@@ -13,6 +13,7 @@ fn setup(
     mut commands: Commands,
     mut windows: ResMut<Windows>,
     mut spawn_hex: EventWriter<bundles::SpawnHex>,
+    mut spawn_unit: EventWriter<bundles::SpawnUnit>,
 ) {
     commands
         .spawn_bundle(OrthographicCameraBundle::new_2d())
@@ -21,6 +22,10 @@ fn setup(
     for hex in hexes {
         spawn_hex.send(bundles::SpawnHex { q: hex.q, r: hex.r });
     }
+
+    spawn_unit.send(bundles::SpawnUnit { q: 0, r: 0 });
+    spawn_unit.send(bundles::SpawnUnit { q: 2, r: 0 });
+    spawn_unit.send(bundles::SpawnUnit { q: 0, r: -4 });
 
     windows
         .get_primary_mut()
@@ -37,7 +42,10 @@ fn main() {
         .init_resource::<systems::hex_map::CoordinatesToHex>()
         .init_resource::<systems::mouse_world_coordinates::MouseWorldCoordinates>()
         .add_event::<bundles::SpawnHex>()
+        .add_event::<bundles::SpawnUnit>()
+        .add_system(systems::move_entity_to_coordinates)
         .add_system(systems::mouse_world_coordinates)
+        .add_system(bundles::create_unit_system)
         .add_system(bundles::create_hex_system)
         .add_startup_system(setup)
         .add_system(systems::z_order)
