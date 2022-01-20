@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 # Dev time
 bevy = { version = "0.6.0", features = ["dynamic"] }
+# bevy = { path = "/home/speak/git/bevy", features = ["dynamic"] }
 
 # Release time
 # bevy = 0.6

@@ -1,6 +1,6 @@
 use crate::components::ColorFade;
+use crate::components::Coordinates;
 use crate::components::Layer;
-use crate::components::MapCoordinates;
 use crate::components::Origin;
 use crate::components::Position;
 use crate::models::pointy_hex_to_pixel;
@@ -16,7 +16,7 @@ extern crate lazy_static;
 #[derive(Bundle)]
 pub struct Unit {
     pub position: Position,
-    pub coordinates: MapCoordinates,
+    pub coordinates: Coordinates,
     pub layer: Layer,
     pub color_fade: ColorFade,
     pub unit: components::Unit,
@@ -40,9 +40,9 @@ pub fn create_unit_system(
         commands.spawn_bundle(Unit {
             unit: components::Unit,
             // TODO: Make the origin coordinates normalized
-            origin: Origin(Vec3::new(-15.0, 8.0, 0.0)),
+            origin: Origin(Vec3::new(0.0, 23.0, 0.0)),
             position: Position { x: 0.0, y: 0.0 },
-            coordinates: MapCoordinates { q: ev.q, r: ev.r },
+            coordinates: Coordinates { q: ev.q, r: ev.r },
             layer: Layer(5),
             sprite: SpriteBundle {
                 texture: asset_server.load("sprites/skelly.png"),

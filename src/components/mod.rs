@@ -8,8 +8,8 @@ pub struct Position {
     pub y: f32,
 }
 
-#[derive(Component)]
-pub struct MapCoordinates {
+#[derive(Component, Hash, Eq, PartialEq, Debug)]
+pub struct Coordinates {
     pub q: i32,
     pub r: i32,
 }

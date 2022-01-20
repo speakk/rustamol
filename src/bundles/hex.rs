@@ -1,6 +1,7 @@
 use crate::components::ColorFade;
+use crate::components::Coordinates;
 use crate::components::Layer;
-use crate::components::MapCoordinates;
+use crate::components::Origin;
 use crate::components::Position;
 use crate::models::pointy_hex_to_pixel;
 use bevy::ecs::bundle::Bundle;
@@ -15,10 +16,11 @@ extern crate lazy_static;
 #[derive(Bundle)]
 pub struct Hex {
     pub position: Position,
-    pub coordinates: MapCoordinates,
+    pub coordinates: Coordinates,
     pub layer: Layer,
     pub color_fade: ColorFade,
     pub hex: components::Hex,
+    pub origin: Origin,
 
     #[bundle]
     pub sprite: SpriteBundle,
@@ -38,7 +40,8 @@ pub fn create_hex_system(
         commands.spawn_bundle(Hex {
             hex: components::Hex,
             position: Position { x: 0.0, y: 0.0 },
-            coordinates: MapCoordinates { q: ev.q, r: ev.r },
+            coordinates: Coordinates { q: ev.q, r: ev.r },
+            origin: Origin(Vec3::new(0.0, -6.0, 0.0)),
             layer: Layer(4),
             sprite: SpriteBundle {
                 texture: asset_server.load("sprites/hexagon.png"),

@@ -15,3 +15,6 @@ pub use color_fade::*;
 
 pub mod move_entity_to_coordinates;
 pub use move_entity_to_coordinates::*;
+
+pub mod click_handler;
+pub use click_handler::*;

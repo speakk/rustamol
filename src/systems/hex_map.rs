@@ -1,24 +1,42 @@
+use crate::components::Coordinates;
 use crate::components::Hex;
-use crate::components::MapCoordinates;
+use crate::components::Unit;
 use bevy::prelude::*;
 
-use crate::models::map;
-
 use std::collections::HashMap;
+use std::collections::HashSet;
 
-pub type CoordinatesToHex = HashMap<map::Hex, Entity>;
+pub type CoordinatesToHex = HashMap<Coordinates, Entity>;
+pub type HexOccupants = HashMap<Coordinates, HashSet<Entity>>;
 
 pub fn hex_map(
     mut map: ResMut<CoordinatesToHex>,
-    query: Query<(&MapCoordinates, Entity), Added<Hex>>,
+    query: Query<(&Coordinates, Entity), Added<Hex>>,
 ) {
     for (coordinates, entity) in query.iter() {
         map.insert(
-            map::Hex {
+            Coordinates {
                 q: coordinates.q,
                 r: coordinates.r,
             },
             entity,
         );
+    }
+}
+
+pub fn handle_hex_occupants(
+    mut hex_occupants: ResMut<HexOccupants>,
+    // TODO: Change With<Unit> to something like With<MapOccupant> if you want to support other
+    // types of items on map
+    query: Query<(&Coordinates, Entity), (Changed<Coordinates>, With<Unit>)>,
+) {
+    for (coordinates, entity) in query.iter() {
+        let hex = Coordinates {
+            q: coordinates.q,
+            r: coordinates.r,
+        };
+        println!("Occupant insert into {:?}", &hex);
+        let occupants = hex_occupants.entry(hex).or_insert(HashSet::new());
+        occupants.insert(entity);
     }
 }

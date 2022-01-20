@@ -1,15 +1,10 @@
+use crate::components::Coordinates;
 use bevy::transform::components::Transform;
 use std::cmp;
 
 const HEX_SIZE: f32 = (32.0 / 2.0) * 1.1;
 const HEX_LAYOUT_SIZE_X: f32 = HEX_SIZE;
 const HEX_LAYOUT_SIZE_Y: f32 = HEX_SIZE * 0.82;
-
-#[derive(Eq, Hash, PartialEq, Debug)]
-pub struct Hex {
-    pub q: i32,
-    pub r: i32,
-}
 
 pub struct Matrix {
     f0: f32,
@@ -35,7 +30,7 @@ lazy_static::lazy_static! {
     };
 }
 
-pub fn axial_distance(a: Hex, b: Hex) -> i32 {
+pub fn axial_distance(a: Coordinates, b: Coordinates) -> i32 {
     ((a.q - b.q).abs() + (a.q + a.r - b.q - b.r).abs() + (a.r - b.r).abs()) / 2
 }
 
@@ -48,7 +43,7 @@ pub fn pointy_hex_to_pixel(q: i32, r: i32) -> Transform {
     Transform::from_xyz(x, y, 0.0)
 }
 
-pub fn axial_round(fraq_q: f32, fraq_r: f32) -> Hex {
+pub fn axial_round(fraq_q: f32, fraq_r: f32) -> Coordinates {
     let fraq_s = -fraq_q - fraq_r;
     let mut q = fraq_q.round();
     let mut r = fraq_r.round();
@@ -64,13 +59,13 @@ pub fn axial_round(fraq_q: f32, fraq_r: f32) -> Hex {
         r = -q - s;
     }
 
-    return Hex {
+    return Coordinates {
         q: q as i32,
         r: r as i32,
     };
 }
 
-pub fn pixel_to_pointy_hex(x: f32, y: f32) -> Hex {
+pub fn pixel_to_pointy_hex(x: f32, y: f32) -> Coordinates {
     let q = (3.0_f32.sqrt() / 3.0 * x - 1.0 / 3.0 * y) / HEX_LAYOUT_SIZE_X;
     let r = (2.0 / 3.0 * y) / HEX_LAYOUT_SIZE_Y;
     return axial_round(q, r);
@@ -90,17 +85,17 @@ pub enum MapShape {
     Square,
 }
 
-pub fn create_grid(radius: i32, shape: MapShape) -> Vec<Hex> {
+pub fn create_grid(radius: i32, shape: MapShape) -> Vec<Coordinates> {
     match shape {
         MapShape::Hexagonal => {
-            let mut hexes: Vec<Hex> = vec![];
+            let mut hexes: Vec<Coordinates> = vec![];
 
             for q in -radius..radius {
                 let r1: i32 = cmp::max(-radius, -q - radius);
                 let r2: i32 = cmp::min(radius, -q + radius);
 
                 for r in r1..r2 {
-                    hexes.push(Hex { q, r });
+                    hexes.push(Coordinates { q, r });
                 }
             }
 
