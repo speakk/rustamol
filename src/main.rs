@@ -61,6 +61,7 @@ fn setup(
 const TIME_STEP: f32 = 1.0 / 60.0;
 
 fn main() {
+    static AFTER: &str = "after_update";
     App::new()
         .insert_resource(ClearColor(Color::rgb(0.2, 0.15, 0.23)))
         .add_plugins(DefaultPlugins)
@@ -69,6 +70,7 @@ fn main() {
         .init_resource::<systems::hex_map::HexOccupants>()
         .init_resource::<systems::path_hilight::HilightedPath>()
         .init_resource::<systems::mouse_world_coordinates::MouseWorldCoordinates>()
+        .add_stage_after(CoreStage::Update, AFTER, SystemStage::parallel())
         .add_event::<bundles::SpawnHex>()
         .add_event::<bundles::SpawnUnit>()
         .add_system(systems::click_handler)
@@ -89,5 +91,6 @@ fn main() {
                 .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
                 .with_system(systems::color_fade),
         )
+        .add_system_to_stage(AFTER, systems::selected_removal)
         .run();
 }
