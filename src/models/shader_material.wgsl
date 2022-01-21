@@ -35,6 +35,7 @@ struct FragmentInput {
 
 // TODO: Have this come externally, 1/spriteW, 1/spriteH
 var<private> stepSize: vec2<f32> = vec2<f32>(.01, .01);
+var<private> outlineColor: vec3<f32> = vec3<f32>(0., 0.8, 0.5);
 
 [[stage(fragment)]]
 fn fragment(in: FragmentInput) -> [[location(0)]] vec4<f32> {
@@ -51,7 +52,7 @@ fn fragment(in: FragmentInput) -> [[location(0)]] vec4<f32> {
       alpha = alpha - textureSample(texture, texture_sampler, in.uv + vec2<f32>(0., stepSize.y)).a;
       alpha = alpha - textureSample(texture, texture_sampler, in.uv + vec2<f32>(0., -stepSize.y)).a;
 
-      var result_color: vec4<f32> = vec4<f32>(0., 1., 1., alpha);
+      var result_color: vec4<f32> = vec4<f32>(outlineColor.r, outlineColor.g, outlineColor.b, alpha);
       if (result_color.a == 0.) {
         return output_color;
       } else {

@@ -11,7 +11,7 @@ pub fn selected(
 
         if let Some(mut mat) = mat {
             mat.outline = true;
-            //mat.color.set_b(0.5);
+            mat.color.set_b(0.5);
         }
     }
 }
@@ -25,6 +25,7 @@ pub fn selected_removal(
         if let Ok(handle) = query.get(entity) {
             if let Some(mut mat) = assets.get_mut(handle) {
                 mat.outline = false;
+                mat.color.set_b(1.0);
             }
         }
     }
