@@ -39,7 +39,7 @@ impl Plugin for ShaderMaterialPlugin {
             .set_untracked(
                 Handle::<ShaderMaterial>::default(),
                 ShaderMaterial {
-                    outline: 0,
+                    outline: false,
                     color: Color::rgb(1.0, 0.0, 1.0),
                     ..Default::default()
                 },
@@ -51,9 +51,9 @@ impl Plugin for ShaderMaterialPlugin {
 #[derive(Debug, Clone, TypeUuid)]
 #[uuid = "e228a544-e3ca-4e1e-bb9d-4d8bc1ad8c18"]
 pub struct ShaderMaterial {
-    pub outline: u32,
     pub color: Color,
     pub texture: Option<Handle<Image>>,
+    pub outline: bool,
 }
 
 impl Default for ShaderMaterial {
@@ -61,7 +61,7 @@ impl Default for ShaderMaterial {
         ShaderMaterial {
             color: Color::rgb(1.0, 0.0, 1.0),
             texture: None,
-            outline: 0,
+            outline: false,
         }
     }
 }
@@ -70,7 +70,7 @@ impl From<Color> for ShaderMaterial {
     fn from(color: Color) -> Self {
         ShaderMaterial {
             color,
-            outline: 0,
+            outline: false,
             ..Default::default()
         }
     }
@@ -81,7 +81,7 @@ impl From<Handle<Image>> for ShaderMaterial {
         ShaderMaterial {
             texture: Some(texture),
             color: Color::WHITE,
-            outline: 0,
+            outline: false,
         }
     }
 }
@@ -101,6 +101,7 @@ bitflags::bitflags! {
 pub struct ShaderMaterialUniformData {
     pub color: Vec4,
     pub flags: u32,
+    pub outline: u32,
 }
 
 /// The GPU representation of a [`ShaderMaterial`].
@@ -149,6 +150,7 @@ impl RenderAsset for ShaderMaterial {
         let value = ShaderMaterialUniformData {
             color: material.color.as_linear_rgba_f32().into(),
             flags: flags.bits(),
+            outline: if material.outline { 1u32 } else { 0u32 },
         };
         let value_std140 = value.as_std140();
 

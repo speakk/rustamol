@@ -35,7 +35,8 @@ fn setup(
     spawn_unit.send(bundles::SpawnUnit { q: 2, r: 0 });
     spawn_unit.send(bundles::SpawnUnit { q: 0, r: -4 });
 
-    let material = ShaderMaterial::from(asset_server.load("sprites/skelly.png"));
+    let mut material = ShaderMaterial::from(asset_server.load("sprites/skelly.png"));
+    material.outline = false;
 
     commands
         .spawn_bundle(ShaderMesh2dBundle {

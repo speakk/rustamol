@@ -5,6 +5,7 @@ struct ShaderMaterial {
     color: vec4<f32>;
     // 'flags' is a bit field indicating various options. u32 is 32 bits so we have up to 32 options.
     flags: u32;
+    outline: u32;
 };
 let COLOR_MATERIAL_FLAGS_TEXTURE_BIT: u32 = 1u;
 
@@ -39,12 +40,16 @@ var<private> stepSize: vec2<f32> = vec2<f32>(.01, .01);
 fn fragment(in: FragmentInput) -> [[location(0)]] vec4<f32> {
     var output_color: vec4<f32> = material.color;
     if ((material.flags & COLOR_MATERIAL_FLAGS_TEXTURE_BIT) != 0u) {
+      output_color = output_color * textureSample(texture, texture_sampler, in.uv);
+      if (material.outline == 0u) {
+        return output_color;
+      }
+
       var alpha: f32 = 4.0 * textureSample(texture, texture_sampler, in.uv).a;
       alpha = alpha - textureSample(texture, texture_sampler, in.uv + vec2<f32>(stepSize.x, 0.)).a;
       alpha = alpha - textureSample(texture, texture_sampler, in.uv + vec2<f32>(-stepSize.x, 0.)).a;
       alpha = alpha - textureSample(texture, texture_sampler, in.uv + vec2<f32>(0., stepSize.y)).a;
       alpha = alpha - textureSample(texture, texture_sampler, in.uv + vec2<f32>(0., -stepSize.y)).a;
-      output_color = output_color * textureSample(texture, texture_sampler, in.uv);
 
       var result_color: vec4<f32> = vec4<f32>(0., 1., 1., alpha);
       if (result_color.a == 0.) {
