@@ -1,5 +1,5 @@
 use crate::components::Coordinates;
-use bevy::transform::components::Transform;
+use bevy::math::Vec2;
 use std::cmp;
 
 const HEX_SIZE: f32 = (32.0 / 2.0) * 1.1;
@@ -45,13 +45,13 @@ pub fn axial_distance(a: Coordinates, b: Coordinates) -> i32 {
     ((a.q - b.q).abs() + (a.q + a.r - b.q - b.r).abs() + (a.r - b.r).abs()) / 2
 }
 
-pub fn pointy_hex_to_pixel(q: i32, r: i32) -> Transform {
+pub fn pointy_hex_to_pixel(q: i32, r: i32) -> Vec2 {
     let q = q as f32;
     let r = r as f32;
     let x = (POINTY_HEX_MATRIX.f0 * q + POINTY_HEX_MATRIX.f1 * r) * HEX_LAYOUT_SIZE_X;
     let y = (POINTY_HEX_MATRIX.f2 * q + POINTY_HEX_MATRIX.f3 * r) * HEX_LAYOUT_SIZE_Y;
 
-    Transform::from_xyz(x, y, 0.0)
+    Vec2::new(x, y)
 }
 
 pub fn axial_round(fraq_q: f32, fraq_r: f32) -> Coordinates {

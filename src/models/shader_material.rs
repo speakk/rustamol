@@ -39,6 +39,7 @@ impl Plugin for ShaderMaterialPlugin {
             .set_untracked(
                 Handle::<ShaderMaterial>::default(),
                 ShaderMaterial {
+                    outline: 0,
                     color: Color::rgb(1.0, 0.0, 1.0),
                     ..Default::default()
                 },
@@ -50,6 +51,7 @@ impl Plugin for ShaderMaterialPlugin {
 #[derive(Debug, Clone, TypeUuid)]
 #[uuid = "e228a544-e3ca-4e1e-bb9d-4d8bc1ad8c18"]
 pub struct ShaderMaterial {
+    pub outline: u32,
     pub color: Color,
     pub texture: Option<Handle<Image>>,
 }
@@ -59,6 +61,7 @@ impl Default for ShaderMaterial {
         ShaderMaterial {
             color: Color::rgb(1.0, 0.0, 1.0),
             texture: None,
+            outline: 0,
         }
     }
 }
@@ -67,6 +70,7 @@ impl From<Color> for ShaderMaterial {
     fn from(color: Color) -> Self {
         ShaderMaterial {
             color,
+            outline: 0,
             ..Default::default()
         }
     }
@@ -77,6 +81,7 @@ impl From<Handle<Image>> for ShaderMaterial {
         ShaderMaterial {
             texture: Some(texture),
             color: Color::WHITE,
+            outline: 0,
         }
     }
 }

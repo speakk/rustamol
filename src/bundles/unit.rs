@@ -2,7 +2,6 @@ use crate::components::ColorFade;
 use crate::components::Coordinates;
 use crate::components::Layer;
 use crate::components::Origin;
-use crate::components::Position;
 use crate::models::pointy_hex_to_pixel;
 use bevy::ecs::bundle::Bundle;
 use bevy::ecs::event::EventReader;
@@ -15,7 +14,6 @@ extern crate lazy_static;
 
 #[derive(Bundle)]
 pub struct Unit {
-    pub position: Position,
     pub coordinates: Coordinates,
     pub layer: Layer,
     pub color_fade: ColorFade,
@@ -41,12 +39,11 @@ pub fn create_unit_system(
             unit: components::Unit,
             // TODO: Make the origin coordinates normalized
             origin: Origin(Vec3::new(0.0, 23.0, 0.0)),
-            position: Position { x: 0.0, y: 0.0 },
             coordinates: Coordinates { q: ev.q, r: ev.r },
             layer: Layer(5),
             sprite: SpriteBundle {
                 texture: asset_server.load("sprites/skelly.png"),
-                transform: pointy_hex_to_pixel(ev.q, ev.r),
+                transform: Transform::from_translation(pointy_hex_to_pixel(ev.q, ev.r).extend(0.)),
                 ..Default::default()
             },
             color_fade: ColorFade(Color::WHITE),

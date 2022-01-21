@@ -2,7 +2,6 @@ use crate::components::ColorFade;
 use crate::components::Coordinates;
 use crate::components::Layer;
 use crate::components::Origin;
-use crate::components::Position;
 use crate::models::pointy_hex_to_pixel;
 use bevy::ecs::bundle::Bundle;
 use bevy::ecs::event::EventReader;
@@ -15,7 +14,6 @@ extern crate lazy_static;
 
 #[derive(Bundle)]
 pub struct Hex {
-    pub position: Position,
     pub coordinates: Coordinates,
     pub layer: Layer,
     pub color_fade: ColorFade,
@@ -39,13 +37,12 @@ pub fn create_hex_system(
     for ev in spawn_hex_event.iter() {
         commands.spawn_bundle(Hex {
             hex: components::Hex,
-            position: Position { x: 0.0, y: 0.0 },
             coordinates: Coordinates { q: ev.q, r: ev.r },
             origin: Origin(Vec3::new(0.0, -6.0, 0.0)),
             layer: Layer(4),
             sprite: SpriteBundle {
                 texture: asset_server.load("sprites/hexagon.png"),
-                transform: pointy_hex_to_pixel(ev.q, ev.r),
+                transform: Transform::from_translation(pointy_hex_to_pixel(ev.q, ev.r).extend(0.)),
                 ..Default::default()
             },
             color_fade: ColorFade(Color::WHITE),

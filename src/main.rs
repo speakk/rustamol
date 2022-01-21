@@ -1,4 +1,5 @@
 use crate::components::MainCamera;
+use crate::components::*;
 use crate::models::ShaderMaterial;
 use crate::models::ShaderMaterialPlugin;
 use crate::models::ShaderMesh2dBundle;
@@ -30,20 +31,25 @@ fn setup(
         spawn_hex.send(bundles::SpawnHex { q: hex.q, r: hex.r });
     }
 
-    spawn_unit.send(bundles::SpawnUnit { q: 0, r: 0 });
+    spawn_unit.send(bundles::SpawnUnit { q: 0, r: -2 });
     spawn_unit.send(bundles::SpawnUnit { q: 2, r: 0 });
     spawn_unit.send(bundles::SpawnUnit { q: 0, r: -4 });
 
     let material = ShaderMaterial::from(asset_server.load("sprites/skelly.png"));
 
-    commands.spawn_bundle(ShaderMesh2dBundle {
-        mesh: Mesh2dHandle(meshes.add(Mesh::from(shape::Quad::new(Vec2::new(32., 48.))))),
-        transform: Transform::default()
-            .with_translation(Vec3::new(0., 0., 20.))
-            .with_scale(Vec3::splat(1.)),
-        material: materials.add(material),
-        ..Default::default()
-    });
+    commands
+        .spawn_bundle(ShaderMesh2dBundle {
+            mesh: Mesh2dHandle(meshes.add(Mesh::from(shape::Quad::new(Vec2::new(32., 48.))))),
+            transform: Transform::default()
+                .with_translation(Vec3::new(0., 0., 20.))
+                .with_scale(Vec3::splat(1.)),
+            material: materials.add(material),
+            ..Default::default()
+        })
+        .insert(Unit)
+        .insert(Layer(20))
+        .insert(Coordinates { q: 0, r: 0 })
+        .insert(Origin(Vec3::new(0.0, 23.0, 0.0)));
 
     windows
         .get_primary_mut()

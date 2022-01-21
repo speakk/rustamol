@@ -2,12 +2,6 @@ use bevy::ecs::component::Component;
 use bevy::math::Vec3;
 use bevy::render::color::Color;
 
-#[derive(Component)]
-pub struct Position {
-    pub x: f32,
-    pub y: f32,
-}
-
 #[derive(Component, Hash, Eq, PartialEq, Debug, Clone, Copy)]
 pub struct Coordinates {
     pub q: i32,
