@@ -17,3 +17,4 @@ bevy = { version = "0.6.0", features = ["dynamic"] }
 
 lazy_static = "1.4.0"
 pathfinding = "3.0.6"
+bitflags = "1.2"

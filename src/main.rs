@@ -1,6 +1,10 @@
 use crate::components::MainCamera;
+use crate::models::ShaderMaterial;
+use crate::models::ShaderMaterialPlugin;
+use crate::models::ShaderMesh2dBundle;
 use bevy::core::FixedTimestep;
 use bevy::prelude::*;
+use bevy::sprite::Mesh2dHandle;
 
 #[macro_use]
 
@@ -14,6 +18,9 @@ fn setup(
     mut windows: ResMut<Windows>,
     mut spawn_hex: EventWriter<bundles::SpawnHex>,
     mut spawn_unit: EventWriter<bundles::SpawnUnit>,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<ShaderMaterial>>,
+    asset_server: Res<AssetServer>,
 ) {
     commands
         .spawn_bundle(OrthographicCameraBundle::new_2d())
@@ -27,6 +34,17 @@ fn setup(
     spawn_unit.send(bundles::SpawnUnit { q: 2, r: 0 });
     spawn_unit.send(bundles::SpawnUnit { q: 0, r: -4 });
 
+    let material = ShaderMaterial::from(asset_server.load("sprites/skelly.png"));
+
+    commands.spawn_bundle(ShaderMesh2dBundle {
+        mesh: Mesh2dHandle(meshes.add(Mesh::from(shape::Quad::new(Vec2::new(32., 48.))))),
+        transform: Transform::default()
+            .with_translation(Vec3::new(0., 0., 20.))
+            .with_scale(Vec3::splat(1.)),
+        material: materials.add(material),
+        ..Default::default()
+    });
+
     windows
         .get_primary_mut()
         .unwrap()
@@ -39,6 +57,7 @@ fn main() {
     App::new()
         .insert_resource(ClearColor(Color::rgb(0.2, 0.15, 0.23)))
         .add_plugins(DefaultPlugins)
+        .add_plugin(ShaderMaterialPlugin)
         .init_resource::<systems::hex_map::CoordinatesToHex>()
         .init_resource::<systems::hex_map::HexOccupants>()
         .init_resource::<systems::path_hilight::HilightedPath>()

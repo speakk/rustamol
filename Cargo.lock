@@ -2598,6 +2598,7 @@ name = "rustamol"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "bitflags",
  "lazy_static",
  "pathfinding",
 ]
