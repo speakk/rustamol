@@ -7,7 +7,7 @@ use bevy::prelude::*;
 use crate::models::map;
 use crate::models::path_finding;
 
-pub type HilightedPath = Vec<Coordinates>;
+pub type HilightedPath = Option<Vec<Coordinates>>;
 
 pub type LastHoveredCoordinates = Option<Coordinates>;
 
@@ -30,6 +30,7 @@ pub fn find_path_hilight(
     selected_query: Query<&Coordinates, With<Selected>>,
     mut hilighted_path: ResMut<HilightedPath>,
     hex_occupants: Res<HexOccupants>,
+    coordinates_to_hex: Res<CoordinatesToHex>,
     last_hovered_coordinates: Res<LastHoveredCoordinates>,
 ) {
     if last_hovered_coordinates.is_changed() {
@@ -39,11 +40,14 @@ pub fn find_path_hilight(
                 let path = path_finding::get_path(
                     *entity_coordinates,
                     *coordinates,
+                    coordinates_to_hex.into_inner(),
                     hex_occupants.into_inner(),
                 );
 
                 if let Some(path) = path {
-                    *hilighted_path = path;
+                    *hilighted_path = Some(path);
+                } else {
+                    *hilighted_path = None;
                 }
             }
         }
@@ -55,12 +59,14 @@ pub fn path_hilight(
     mut query: Query<&mut Sprite>,
     coordinates_to_hex: Res<CoordinatesToHex>,
 ) {
-    for coordinate in hilighted_path.iter() {
-        let entity = coordinates_to_hex.get(coordinate);
-        if let Some(entity) = entity {
-            if let Ok(mut sprite) = query.get_mut(*entity) {
-                sprite.color.set_b(0.3);
-                sprite.color.set_g(0.6);
+    if let Some(hilighted_path) = hilighted_path.into_inner() {
+        for coordinate in hilighted_path.iter() {
+            let entity = coordinates_to_hex.get(coordinate);
+            if let Some(entity) = entity {
+                if let Ok(mut sprite) = query.get_mut(*entity) {
+                    sprite.color.set_b(0.3);
+                    sprite.color.set_g(0.6);
+                }
             }
         }
     }

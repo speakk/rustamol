@@ -33,10 +33,9 @@ fn setup(
     spawn_unit.send(bundles::SpawnUnit { q: 3, r: 2 });
     spawn_unit.send(bundles::SpawnUnit { q: 0, r: -4 });
 
-    windows
-        .get_primary_mut()
-        .unwrap()
-        .update_scale_factor_from_backend(2.0);
+    let window = windows.get_primary_mut().unwrap();
+    window.set_resolution(500., 500.);
+    window.update_scale_factor_from_backend(2.0);
 }
 
 const TIME_STEP: f32 = 1.0 / 60.0;
