@@ -5,6 +5,7 @@ use pathfinding::prelude::bfs;
 
 impl Coordinates {
     fn successors(&self, hex_occupants: &HexOccupants) -> Vec<Coordinates> {
+        println!("Looking for successors");
         let Coordinates { q, r } = self;
         NEIGHBOR_DIRECTIONS
             .clone()

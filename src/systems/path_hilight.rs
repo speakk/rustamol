@@ -9,28 +9,42 @@ use crate::models::path_finding;
 
 pub type HilightedPath = Vec<Coordinates>;
 
+pub type LastHoveredCoordinates = Option<Coordinates>;
+
+pub fn last_hovered_coordinates(
+    mut last_hovered_coordinates: ResMut<LastHoveredCoordinates>,
+    mouse_position: Res<MouseWorldCoordinates>,
+    coordinates_to_hex: Res<CoordinatesToHex>,
+) {
+    let hex_coordinates = map::pixel_to_pointy_hex(mouse_position.x, mouse_position.y);
+    let hex = coordinates_to_hex.get(&hex_coordinates);
+
+    if let Some(_) = hex {
+        *last_hovered_coordinates = Some(hex_coordinates);
+    } else {
+        *last_hovered_coordinates = None;
+    }
+}
+
 pub fn find_path_hilight(
     selected_query: Query<&Coordinates, With<Selected>>,
-    mouse_world_coordinates: Res<MouseWorldCoordinates>,
-    coordinates_to_hex: Res<CoordinatesToHex>,
     mut hilighted_path: ResMut<HilightedPath>,
     hex_occupants: Res<HexOccupants>,
+    last_hovered_coordinates: Res<LastHoveredCoordinates>,
 ) {
-    let position = mouse_world_coordinates;
-    let hex_coordinates = map::pixel_to_pointy_hex(position.x, position.y);
+    if last_hovered_coordinates.is_changed() {
+        if let Some(coordinates) = last_hovered_coordinates.into_inner() {
+            let entity_coordinates = selected_query.get_single();
+            if let Ok(entity_coordinates) = entity_coordinates {
+                let path = path_finding::get_path(
+                    *entity_coordinates,
+                    *coordinates,
+                    hex_occupants.into_inner(),
+                );
 
-    if let Some(_) = coordinates_to_hex.get(&hex_coordinates) {
-        let entity_coordinates = selected_query.get_single();
-        if let Ok(entity_coordinates) = entity_coordinates {
-            //for entity_coordinates in selected_query.iter_mut() {
-            let path = path_finding::get_path(
-                *entity_coordinates,
-                hex_coordinates,
-                hex_occupants.into_inner(),
-            );
-
-            if let Some(path) = path {
-                *hilighted_path = path;
+                if let Some(path) = path {
+                    *hilighted_path = path;
+                }
             }
         }
     }

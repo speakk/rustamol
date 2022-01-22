@@ -28,6 +28,9 @@ fn setup(
 
     spawn_unit.send(bundles::SpawnUnit { q: 0, r: -2 });
     spawn_unit.send(bundles::SpawnUnit { q: 2, r: 0 });
+    spawn_unit.send(bundles::SpawnUnit { q: 2, r: 1 });
+    spawn_unit.send(bundles::SpawnUnit { q: 2, r: 2 });
+    spawn_unit.send(bundles::SpawnUnit { q: 3, r: 2 });
     spawn_unit.send(bundles::SpawnUnit { q: 0, r: -4 });
 
     windows
@@ -46,6 +49,7 @@ fn main() {
         .add_plugin(ShaderMaterialPlugin)
         .init_resource::<systems::hex_map::CoordinatesToHex>()
         .init_resource::<systems::hex_map::HexOccupants>()
+        .init_resource::<systems::path_hilight::LastHoveredCoordinates>()
         .init_resource::<systems::path_hilight::HilightedPath>()
         .init_resource::<systems::mouse_world_coordinates::MouseWorldCoordinates>()
         .add_stage_after(CoreStage::Update, AFTER, SystemStage::parallel())
@@ -60,6 +64,7 @@ fn main() {
         .add_system(systems::z_order)
         .add_system(systems::hex_map)
         .add_system(systems::selected)
+        .add_system(systems::last_hovered_coordinates)
         .add_system(systems::find_path_hilight)
         .add_system(systems::path_hilight)
         .add_system(systems::handle_hex_occupants)
