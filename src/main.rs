@@ -1,11 +1,9 @@
 use crate::components::MainCamera;
-use crate::components::*;
 use crate::models::ShaderMaterial;
 use crate::models::ShaderMaterialPlugin;
 use crate::models::ShaderMesh2dBundle;
 use bevy::core::FixedTimestep;
 use bevy::prelude::*;
-use bevy::sprite::Mesh2dHandle;
 
 #[macro_use]
 
@@ -19,9 +17,6 @@ fn setup(
     mut windows: ResMut<Windows>,
     mut spawn_hex: EventWriter<bundles::SpawnHex>,
     mut spawn_unit: EventWriter<bundles::SpawnUnit>,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<ShaderMaterial>>,
-    asset_server: Res<AssetServer>,
 ) {
     commands
         .spawn_bundle(OrthographicCameraBundle::new_2d())
@@ -34,23 +29,6 @@ fn setup(
     spawn_unit.send(bundles::SpawnUnit { q: 0, r: -2 });
     spawn_unit.send(bundles::SpawnUnit { q: 2, r: 0 });
     spawn_unit.send(bundles::SpawnUnit { q: 0, r: -4 });
-
-    let mut material = ShaderMaterial::from(asset_server.load("sprites/skelly.png"));
-    material.outline = false;
-
-    commands
-        .spawn_bundle(ShaderMesh2dBundle {
-            mesh: Mesh2dHandle(meshes.add(Mesh::from(shape::Quad::new(Vec2::new(32., 48.))))),
-            transform: Transform::default()
-                .with_translation(Vec3::new(0., 0., 20.))
-                .with_scale(Vec3::splat(1.)),
-            material: materials.add(material),
-            ..Default::default()
-        })
-        .insert(Unit)
-        .insert(Layer(20))
-        .insert(Coordinates { q: 0, r: 0 })
-        .insert(Origin(Vec3::new(0.0, 23.0, 0.0)));
 
     windows
         .get_primary_mut()
