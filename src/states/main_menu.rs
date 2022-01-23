@@ -36,9 +36,12 @@ pub fn setup_background_hexes(mut commands: Commands, asset_server: Res<AssetSer
     }
 }
 
-pub fn setup_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn_bundle(UiCameraBundle::default());
-    let button_entity = commands
+pub fn get_menu_button(
+    text: &str,
+    commands: &mut Commands,
+    asset_server: &Res<AssetServer>,
+) -> Entity {
+    commands
         .spawn_bundle(ButtonBundle {
             style: Style {
                 size: Size::new(Val::Px(150.0), Val::Px(65.0)),
@@ -56,7 +59,7 @@ pub fn setup_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
         .with_children(|parent| {
             parent.spawn_bundle(TextBundle {
                 text: Text::with_section(
-                    "Play",
+                    text,
                     TextStyle {
                         font: asset_server.load("fonts/ThaleahFat.ttf"),
                         font_size: 40.0,
@@ -67,8 +70,57 @@ pub fn setup_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
                 ..Default::default()
             });
         })
-        .id();
-    commands.insert_resource(button_entity as MenuButton);
+        .id()
+}
+
+pub fn setup_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn_bundle(UiCameraBundle::default());
+    let play_button = get_menu_button("play", &mut commands, &asset_server);
+    let exit_button = get_menu_button("exit", &mut commands, &asset_server);
+
+    commands
+        .spawn_bundle(NodeBundle {
+            style: Style {
+                size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
+                flex_direction: FlexDirection::Column,
+                justify_content: JustifyContent::SpaceAround,
+                ..Default::default()
+            },
+            color: Color::NONE.into(),
+            ..Default::default()
+        })
+        .push_children(&[exit_button, play_button]);
+    // let button_entity = commands
+    //     .spawn_bundle(ButtonBundle {
+    //         style: Style {
+    //             size: Size::new(Val::Px(150.0), Val::Px(65.0)),
+    //             // center button
+    //             margin: Rect::all(Val::Auto),
+    //             // horizontally center child text
+    //             justify_content: JustifyContent::Center,
+    //             // vertically center child text
+    //             align_items: AlignItems::Center,
+    //             ..Default::default()
+    //         },
+    //         color: NORMAL_BUTTON_COLOR.into(),
+    //         ..Default::default()
+    //     })
+    //     .with_children(|parent| {
+    //         parent.spawn_bundle(TextBundle {
+    //             text: Text::with_section(
+    //                 "Play",
+    //                 TextStyle {
+    //                     font: asset_server.load("fonts/ThaleahFat.ttf"),
+    //                     font_size: 40.0,
+    //                     color: BUTTON_TEXT_COLOR,
+    //                 },
+    //                 Default::default(),
+    //             ),
+    //             ..Default::default()
+    //         });
+    //     })
+    //     .id();
+    commands.insert_resource(play_button as MenuButton);
 }
 
 fn menu_interact(
