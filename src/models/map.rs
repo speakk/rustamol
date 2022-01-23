@@ -11,10 +11,10 @@ pub struct Matrix {
     f1: f32,
     f2: f32,
     f3: f32,
-    b0: f32,
-    b1: f32,
-    b2: f32,
-    b3: f32,
+    // b0: f32,
+    // b1: f32,
+    // b2: f32,
+    // b3: f32,
 }
 
 lazy_static::lazy_static! {
@@ -23,10 +23,10 @@ lazy_static::lazy_static! {
         f1: 3_f32.sqrt() / 2.0,
         f2: 0.0,
         f3: 3.0 / 2.0,
-        b0: 3_f32.sqrt() / 3.0,
-        b1: -1.0 / 3.0,
-        b2: 0.0,
-        b3: 2.0 / 3.0,
+        // b0: 3_f32.sqrt() / 3.0,
+        // b1: -1.0 / 3.0,
+        // b2: 0.0,
+        // b3: 2.0 / 3.0,
     };
 }
 
@@ -41,9 +41,9 @@ lazy_static::lazy_static! {
     ];
 }
 
-pub fn axial_distance(a: Coordinates, b: Coordinates) -> i32 {
-    ((a.q - b.q).abs() + (a.q + a.r - b.q - b.r).abs() + (a.r - b.r).abs()) / 2
-}
+// pub fn axial_distance(a: Coordinates, b: Coordinates) -> i32 {
+//     ((a.q - b.q).abs() + (a.q + a.r - b.q - b.r).abs() + (a.r - b.r).abs()) / 2
+// }
 
 pub fn pointy_hex_to_pixel(q: i32, r: i32) -> Vec2 {
     let q = q as f32;
@@ -97,10 +97,10 @@ pub enum MapShape {
 }
 
 pub fn create_grid(radius: i32, shape: MapShape) -> Vec<Coordinates> {
+    let mut hexes: Vec<Coordinates> = vec![];
+
     match shape {
         MapShape::Hexagonal => {
-            let mut hexes: Vec<Coordinates> = vec![];
-
             for q in -radius..radius {
                 let r1: i32 = cmp::max(-radius, -q - radius);
                 let r2: i32 = cmp::min(radius, -q + radius);
@@ -109,9 +109,19 @@ pub fn create_grid(radius: i32, shape: MapShape) -> Vec<Coordinates> {
                     hexes.push(Coordinates { q, r });
                 }
             }
-
-            return hexes;
         }
-        _ => vec![],
+        MapShape::Square => {
+            let top = ((-radius / 2) as f32).floor() as i32;
+            let left = ((-radius / 2) as f32).floor() as i32;
+            let bottom = ((radius / 2) as f32).floor() as i32;
+            let right = ((radius / 2) as f32).floor() as i32;
+            for r in top..bottom {
+                let r_offset = ((r / 2) as f32).floor() as i32;
+                for q in left - r_offset..right - r_offset {
+                    hexes.push(Coordinates { q, r });
+                }
+            }
+        }
     }
+    return hexes;
 }

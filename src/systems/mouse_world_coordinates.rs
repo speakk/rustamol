@@ -32,7 +32,11 @@ pub fn mouse_world_coordinates(
 
         // apply the camera transform
         let position_world = camera_transform.compute_matrix() * p.extend(0.0).extend(1.0);
-        mouse_world_coordinates.x = position_world.x;
-        mouse_world_coordinates.y = position_world.y;
+        if position_world.x != mouse_world_coordinates.x
+            && position_world.y != mouse_world_coordinates.y
+        {
+            mouse_world_coordinates.x = position_world.x;
+            mouse_world_coordinates.y = position_world.y;
+        }
     }
 }

@@ -13,8 +13,6 @@ impl Plugin for StatePlugin {
         app.add_system_set(
             SystemSet::on_update(STATE)
                 .with_system(systems::click_handler)
-                .with_system(systems::move_entity_to_coordinates)
-                .with_system(bundles::create_unit_system)
                 .with_system(systems::selected)
                 .with_system(systems::find_path_hilight)
                 .with_system(systems::path_hilight)
@@ -23,19 +21,16 @@ impl Plugin for StatePlugin {
     }
 }
 
-pub fn setup(
-    mut spawn_hex: EventWriter<bundles::SpawnHex>,
-    mut spawn_unit: EventWriter<bundles::SpawnUnit>,
-) {
+pub fn setup(mut commands: Commands) {
     let hexes = models::map::create_grid(8, models::MapShape::Hexagonal);
     for hex in hexes {
-        spawn_hex.send(bundles::SpawnHex { q: hex.q, r: hex.r });
+        commands.add(bundles::SpawnHex { q: hex.q, r: hex.r });
     }
 
-    spawn_unit.send(bundles::SpawnUnit { q: 0, r: -2 });
-    spawn_unit.send(bundles::SpawnUnit { q: 2, r: 0 });
-    spawn_unit.send(bundles::SpawnUnit { q: 2, r: 1 });
-    spawn_unit.send(bundles::SpawnUnit { q: 2, r: 2 });
-    spawn_unit.send(bundles::SpawnUnit { q: 3, r: 2 });
-    spawn_unit.send(bundles::SpawnUnit { q: 0, r: -4 });
+    commands.add(bundles::SpawnUnit { q: 0, r: -2 });
+    commands.add(bundles::SpawnUnit { q: 2, r: 0 });
+    commands.add(bundles::SpawnUnit { q: 2, r: 1 });
+    commands.add(bundles::SpawnUnit { q: 1, r: 2 });
+    commands.add(bundles::SpawnUnit { q: 3, r: 1 });
+    commands.add(bundles::SpawnUnit { q: 0, r: -4 });
 }

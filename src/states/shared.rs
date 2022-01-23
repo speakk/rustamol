@@ -1,9 +1,8 @@
-use crate::bundles;
 use crate::components::MainCamera;
 use crate::models::ShaderMaterialPlugin;
 use crate::systems;
-use crate::AFTER;
 use crate::TIME_STEP;
+use crate::{AFTER, BEFORE};
 use bevy::core::FixedTimestep;
 use bevy::prelude::*;
 
@@ -20,9 +19,7 @@ impl Plugin for StatePlugin {
             .init_resource::<systems::path_hilight::HilightedPath>()
             .init_resource::<systems::mouse_world_coordinates::MouseWorldCoordinates>()
             .add_stage_after(CoreStage::Update, AFTER, SystemStage::parallel())
-            .add_event::<bundles::SpawnHex>()
-            .add_event::<bundles::SpawnUnit>()
-            .add_system(bundles::create_hex_system)
+            .add_stage_before(CoreStage::Update, BEFORE, SystemStage::parallel())
             .add_system_set(
                 SystemSet::new()
                     .label("input")
@@ -31,8 +28,10 @@ impl Plugin for StatePlugin {
             )
             .add_system(systems::z_order)
             .add_system(systems::hex_map)
+            .add_system(systems::move_entity_to_coordinates)
             .add_system(systems::hex_hilight.after("input"))
-            .add_system_set(
+            .add_system_set_to_stage(
+                BEFORE,
                 SystemSet::new()
                     .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))
                     .with_system(systems::color_fade),
