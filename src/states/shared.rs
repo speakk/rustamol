@@ -22,12 +22,16 @@ impl Plugin for StatePlugin {
             .add_stage_after(CoreStage::Update, AFTER, SystemStage::parallel())
             .add_event::<bundles::SpawnHex>()
             .add_event::<bundles::SpawnUnit>()
-            .add_system(systems::mouse_world_coordinates)
             .add_system(bundles::create_hex_system)
+            .add_system_set(
+                SystemSet::new()
+                    .label("input")
+                    .with_system(systems::mouse_world_coordinates)
+                    .with_system(systems::last_hovered_coordinates),
+            )
             .add_system(systems::z_order)
             .add_system(systems::hex_map)
-            .add_system(systems::last_hovered_coordinates)
-            .add_system(systems::hex_hilight)
+            .add_system(systems::hex_hilight.after("input"))
             .add_system_set(
                 SystemSet::new()
                     .with_run_criteria(FixedTimestep::step(TIME_STEP as f64))

@@ -17,7 +17,7 @@ impl Plugin for StatePlugin {
                 .with_system(bundles::create_unit_system)
                 .with_system(systems::selected)
                 .with_system(systems::find_path_hilight)
-                .with_system(systems::path_hilight)
+                .with_system(systems::path_hilight.after("input"))
                 .with_system(systems::handle_hex_occupants),
         );
     }
