@@ -2,7 +2,7 @@ use crate::components::ColorFade;
 use crate::components::Coordinates;
 use crate::components::Layer;
 use crate::components::Origin;
-use crate::ShaderMaterial;
+use crate::models::ShaderMaterial;
 use crate::ShaderMesh2dBundle;
 use bevy::ecs::bundle::Bundle;
 use bevy::ecs::event::EventReader;

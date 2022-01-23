@@ -1,5 +1,5 @@
 use crate::components::Selected;
-use crate::ShaderMaterial;
+use crate::models::ShaderMaterial;
 use bevy::prelude::*;
 
 pub fn selected(
