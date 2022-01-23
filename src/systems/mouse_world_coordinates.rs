@@ -28,11 +28,13 @@ pub fn mouse_world_coordinates(
         let p = pos - size / 2.0;
 
         // assuming there is exactly one main camera entity, so this is OK
-        let camera_transform = query.single();
+        if query.iter().count() == 1 {
+            let camera_transform = query.single();
 
-        // apply the camera transform
-        let position_world = camera_transform.compute_matrix() * p.extend(0.0).extend(1.0);
-        res.x = position_world.x;
-        res.y = position_world.y;
+            // apply the camera transform
+            let position_world = camera_transform.compute_matrix() * p.extend(0.0).extend(1.0);
+            res.x = position_world.x;
+            res.y = position_world.y;
+        }
     }
 }

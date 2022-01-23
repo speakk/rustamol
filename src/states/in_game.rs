@@ -31,13 +31,18 @@ pub fn setup(
     window.update_scale_factor_from_backend(2.0);
 }
 
-pub fn get_system_sets() -> bevy::prelude::SystemSet {
-    SystemSet::on_update(AppState::InGame)
-        .with_system(systems::click_handler)
-        .with_system(systems::move_entity_to_coordinates)
-        .with_system(bundles::create_unit_system)
-        .with_system(systems::selected)
-        .with_system(systems::find_path_hilight)
-        .with_system(systems::path_hilight)
-        .with_system(systems::handle_hex_occupants)
+pub fn add_state_systems(app: &mut bevy::prelude::App) -> &mut bevy::prelude::App {
+    app.add_system_set(SystemSet::on_enter(AppState::InGame).with_system(setup));
+    app.add_system_set(
+        SystemSet::on_update(AppState::InGame)
+            .with_system(systems::click_handler)
+            .with_system(systems::move_entity_to_coordinates)
+            .with_system(bundles::create_unit_system)
+            .with_system(systems::selected)
+            .with_system(systems::find_path_hilight)
+            .with_system(systems::path_hilight)
+            .with_system(systems::handle_hex_occupants),
+    );
+
+    app
 }
