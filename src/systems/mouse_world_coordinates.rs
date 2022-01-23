@@ -1,7 +1,7 @@
 use crate::components::MainCamera;
 use bevy::prelude::*;
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct MouseWorldCoordinates {
     pub x: f32,
     pub y: f32,
@@ -13,7 +13,7 @@ pub fn mouse_world_coordinates(
     windows: Res<Windows>,
     // query to get camera transform
     query: Query<&Transform, With<MainCamera>>,
-    mut res: ResMut<MouseWorldCoordinates>,
+    mut mouse_world_coordinates: ResMut<MouseWorldCoordinates>,
 ) {
     // get the primary window
     let window = windows.get_primary().unwrap();
@@ -28,13 +28,11 @@ pub fn mouse_world_coordinates(
         let p = pos - size / 2.0;
 
         // assuming there is exactly one main camera entity, so this is OK
-        if query.iter().count() == 1 {
-            let camera_transform = query.single();
+        let camera_transform = query.single();
 
-            // apply the camera transform
-            let position_world = camera_transform.compute_matrix() * p.extend(0.0).extend(1.0);
-            res.x = position_world.x;
-            res.y = position_world.y;
-        }
+        // apply the camera transform
+        let position_world = camera_transform.compute_matrix() * p.extend(0.0).extend(1.0);
+        mouse_world_coordinates.x = position_world.x;
+        mouse_world_coordinates.y = position_world.y;
     }
 }

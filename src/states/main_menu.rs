@@ -8,7 +8,7 @@ pub struct StatePlugin;
 
 impl Plugin for StatePlugin {
     fn build(&self, app: &mut App) {
-        const STATE: AppState = AppState::InGame;
+        const STATE: AppState = AppState::MainMenu;
         app.add_system_set(SystemSet::on_enter(STATE).with_system(setup));
         app.add_system_set(
             SystemSet::on_update(STATE)
@@ -23,19 +23,9 @@ impl Plugin for StatePlugin {
     }
 }
 
-pub fn setup(
-    mut spawn_hex: EventWriter<bundles::SpawnHex>,
-    mut spawn_unit: EventWriter<bundles::SpawnUnit>,
-) {
-    let hexes = models::map::create_grid(8, models::MapShape::Hexagonal);
+pub fn setup(mut spawn_hex: EventWriter<bundles::SpawnHex>) {
+    let hexes = models::map::create_grid(8, models::MapShape::Square);
     for hex in hexes {
         spawn_hex.send(bundles::SpawnHex { q: hex.q, r: hex.r });
     }
-
-    spawn_unit.send(bundles::SpawnUnit { q: 0, r: -2 });
-    spawn_unit.send(bundles::SpawnUnit { q: 2, r: 0 });
-    spawn_unit.send(bundles::SpawnUnit { q: 2, r: 1 });
-    spawn_unit.send(bundles::SpawnUnit { q: 2, r: 2 });
-    spawn_unit.send(bundles::SpawnUnit { q: 3, r: 2 });
-    spawn_unit.send(bundles::SpawnUnit { q: 0, r: -4 });
 }

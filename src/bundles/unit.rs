@@ -3,7 +3,7 @@ use crate::components::Coordinates;
 use crate::components::Layer;
 use crate::components::Origin;
 use crate::models::ShaderMaterial;
-use crate::ShaderMesh2dBundle;
+use crate::models::ShaderMesh2dBundle;
 use bevy::ecs::bundle::Bundle;
 use bevy::ecs::event::EventReader;
 use bevy::prelude::*;
