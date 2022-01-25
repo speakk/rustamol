@@ -2,6 +2,7 @@ use crate::bundles;
 use crate::components::Hex;
 use crate::models;
 use crate::AppState;
+use bevy::app::AppExit;
 use bevy::prelude::*;
 
 pub struct StatePlugin;
@@ -11,7 +12,15 @@ const HOVERED_BUTTON_COLOR: Color = Color::hsla(0.0, 0.5, 0.24, 1.);
 const PRESSED_BUTTON_COLOR: Color = Color::hsla(0.0, 0.7, 0.2, 1.);
 const BUTTON_TEXT_COLOR: Color = Color::hsla(0.5, 0.5, 0.4, 1.);
 
-type MenuButton = Entity;
+// type PlayButton = Entity;
+// type ExitButton = Entity;
+type MenuButtons = Entity;
+
+#[derive(Component)]
+struct PlayButton;
+
+#[derive(Component)]
+struct ExitButton;
 
 impl Plugin for StatePlugin {
     fn build(&self, app: &mut App) {
@@ -76,65 +85,67 @@ pub fn get_menu_button(
 pub fn setup_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn_bundle(UiCameraBundle::default());
     let play_button = get_menu_button("play", &mut commands, &asset_server);
+    commands.entity(play_button).insert(PlayButton);
     let exit_button = get_menu_button("exit", &mut commands, &asset_server);
+    commands.entity(exit_button).insert(ExitButton);
 
-    commands
+    let menu_buttons = commands
         .spawn_bundle(NodeBundle {
             style: Style {
                 size: Size::new(Val::Percent(100.0), Val::Percent(100.0)),
+                justify_content: JustifyContent::Center,
                 flex_direction: FlexDirection::Column,
-                justify_content: JustifyContent::SpaceAround,
                 ..Default::default()
             },
             color: Color::NONE.into(),
             ..Default::default()
         })
-        .push_children(&[exit_button, play_button]);
-    // let button_entity = commands
-    //     .spawn_bundle(ButtonBundle {
-    //         style: Style {
-    //             size: Size::new(Val::Px(150.0), Val::Px(65.0)),
-    //             // center button
-    //             margin: Rect::all(Val::Auto),
-    //             // horizontally center child text
-    //             justify_content: JustifyContent::Center,
-    //             // vertically center child text
-    //             align_items: AlignItems::Center,
-    //             ..Default::default()
-    //         },
-    //         color: NORMAL_BUTTON_COLOR.into(),
-    //         ..Default::default()
-    //     })
-    //     .with_children(|parent| {
-    //         parent.spawn_bundle(TextBundle {
-    //             text: Text::with_section(
-    //                 "Play",
-    //                 TextStyle {
-    //                     font: asset_server.load("fonts/ThaleahFat.ttf"),
-    //                     font_size: 40.0,
-    //                     color: BUTTON_TEXT_COLOR,
-    //                 },
-    //                 Default::default(),
-    //             ),
-    //             ..Default::default()
-    //         });
-    //     })
-    //     .id();
-    commands.insert_resource(play_button as MenuButton);
+        .with_children(|parent| {
+            parent
+                .spawn_bundle(NodeBundle {
+                    style: Style {
+                        size: Size::new(Val::Percent(100.0), Val::Percent(30.0)),
+                        flex_direction: FlexDirection::Column,
+                        justify_content: JustifyContent::SpaceBetween,
+                        ..Default::default()
+                    },
+                    color: Color::NONE.into(),
+                    ..Default::default()
+                })
+                .push_children(&[exit_button, play_button]);
+        })
+        .id();
+
+    // commands.insert_resource(play_button as PlayButton);
+    // commands.insert_resource(exit_button as ExitButton);
+    commands.insert_resource(menu_buttons as MenuButtons);
 }
 
 fn menu_interact(
     mut state: ResMut<State<AppState>>,
     mut interaction_query: Query<
-        (&Interaction, &mut UiColor),
+        (
+            &Interaction,
+            &mut UiColor,
+            Option<&PlayButton>,
+            Option<&ExitButton>,
+        ),
         (Changed<Interaction>, With<Button>),
     >,
+    mut exit: EventWriter<AppExit>,
 ) {
-    for (interaction, mut color) in interaction_query.iter_mut() {
+    for (interaction, mut color, play_button, exit_button) in interaction_query.iter_mut() {
         match *interaction {
             Interaction::Clicked => {
                 *color = PRESSED_BUTTON_COLOR.into();
-                state.set(AppState::InGame).unwrap();
+
+                if play_button.is_some() {
+                    state.set(AppState::InGame).unwrap();
+                }
+
+                if exit_button.is_some() {
+                    exit.send(AppExit);
+                }
             }
             Interaction::Hovered => {
                 *color = HOVERED_BUTTON_COLOR.into();
@@ -148,10 +159,12 @@ fn menu_interact(
 
 fn cleanup_menu(
     mut commands: Commands,
-    menu_data: Res<MenuButton>,
+    menu_buttons: Res<MenuButtons>,
     mut hexes: Query<Entity, With<Hex>>,
 ) {
-    commands.entity(*menu_data.into_inner()).despawn_recursive();
+    commands
+        .entity(*menu_buttons.into_inner())
+        .despawn_recursive();
     for entity in hexes.iter_mut() {
         commands.entity(entity).despawn();
     }
