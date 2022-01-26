@@ -2,6 +2,7 @@ use crate::components::ColorFade;
 use crate::components::Coordinates;
 use crate::components::Layer;
 use crate::components::Origin;
+use crate::components::ZOrder;
 use crate::models::pointy_hex_to_pixel;
 use bevy::ecs::bundle::Bundle;
 use bevy::ecs::system::Command;
@@ -20,6 +21,7 @@ pub struct Hex {
     pub color_fade: ColorFade,
     pub hex: components::Hex,
     pub origin: Origin,
+    pub z_order: ZOrder,
 
     #[bundle]
     pub sprite: SpriteBundle,
@@ -50,6 +52,7 @@ impl Command for SpawnHex {
                 ..Default::default()
             },
             color_fade: ColorFade(Color::WHITE),
+            z_order: ZOrder,
         });
     }
 }
@@ -73,6 +76,7 @@ pub fn spawn_hex(
                 ..Default::default()
             },
             color_fade: ColorFade(Color::WHITE),
+            z_order: ZOrder,
         })
         .id()
 }

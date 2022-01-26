@@ -1,3 +1,4 @@
+use crate::states::BundleType;
 use bevy::ecs::component::Component;
 use bevy::math::Vec3;
 use bevy::render::color::Color;
@@ -28,3 +29,12 @@ pub struct Origin(pub Vec3);
 
 #[derive(Component)]
 pub struct Selected;
+
+#[derive(Component)]
+pub struct ZOrder;
+
+#[derive(Component)]
+pub struct AddHandle {
+    pub image_path: &'static str,
+    pub bundle_type: BundleType,
+}

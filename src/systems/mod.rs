@@ -24,3 +24,6 @@ pub use selected::*;
 
 pub mod path_hilight;
 pub use path_hilight::*;
+
+pub mod add_handle;
+pub use add_handle::*;

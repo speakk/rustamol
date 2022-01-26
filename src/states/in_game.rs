@@ -1,4 +1,5 @@
 use crate::bundles;
+use crate::components::Coordinates;
 use crate::models;
 use crate::systems;
 use crate::AppState;
@@ -27,10 +28,10 @@ pub fn setup(mut commands: Commands) {
         commands.add(bundles::SpawnHex { q: hex.q, r: hex.r });
     }
 
-    commands.add(bundles::SpawnUnit { q: 0, r: -2 });
-    commands.add(bundles::SpawnUnit { q: 2, r: 0 });
-    commands.add(bundles::SpawnUnit { q: 2, r: 1 });
-    commands.add(bundles::SpawnUnit { q: 1, r: 2 });
-    commands.add(bundles::SpawnUnit { q: 3, r: 1 });
-    commands.add(bundles::SpawnUnit { q: 0, r: -4 });
+    commands.spawn_bundle(bundles::Unit::new(Coordinates { q: 0, r: -2 }));
+    commands.spawn_bundle(bundles::Unit::new(Coordinates { q: 2, r: 0 }));
+    commands.spawn_bundle(bundles::Unit::new(Coordinates { q: 2, r: 1 }));
+    commands.spawn_bundle(bundles::Unit::new(Coordinates { q: 1, r: 2 }));
+    commands.spawn_bundle(bundles::Unit::new(Coordinates { q: 3, r: 1 }));
+    commands.spawn_bundle(bundles::Unit::new(Coordinates { q: 0, r: -4 }));
 }
