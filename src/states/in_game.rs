@@ -25,7 +25,7 @@ impl Plugin for StatePlugin {
 pub fn setup(mut commands: Commands) {
     let hexes = models::map::create_grid(8, models::MapShape::Hexagonal);
     for hex in hexes {
-        commands.add(bundles::SpawnHex { q: hex.q, r: hex.r });
+        commands.spawn_bundle(bundles::Hex::new(hex));
     }
 
     commands.spawn_bundle(bundles::Unit::new(Coordinates { q: 0, r: -2 }));

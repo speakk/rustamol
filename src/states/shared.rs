@@ -95,7 +95,8 @@ pub fn setup_handles(
 }
 
 //pub fn debug_system(query: Query<&Mesh2dHandle, With<Unit>>) {
-pub fn debug_system() {
+pub fn debug_system(res: Res<Images>) {
+    //println!("Images {}", res.into_inner().len());
     // for transform in query.iter() {
     //     println!("UNIT {:?}", transform.0);
     // }

@@ -35,6 +35,5 @@ pub struct ZOrder;
 
 #[derive(Component)]
 pub struct AddHandle {
-    pub image_path: &'static str,
     pub bundle_type: BundleType,
 }

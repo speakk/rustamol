@@ -5,7 +5,6 @@ use crate::components::Layer;
 use crate::components::Origin;
 use crate::components::ZOrder;
 use crate::states::BundleType;
-use crate::states::SKELLY_SPRITE_PATH;
 use bevy::ecs::bundle::Bundle;
 use bevy::prelude::*;
 
@@ -21,14 +20,8 @@ pub struct Unit {
     pub unit: components::Unit,
     pub origin: Origin,
     pub add_handle: AddHandle,
-    pub z_order: ZOrder, // #[bundle]
-                         // pub sprite: ShaderMesh2dBundle
+    pub z_order: ZOrder,
 }
-
-// pub struct SpawnUnit {
-//     pub q: i32,
-//     pub r: i32,
-// }
 
 impl Unit {
     pub fn new(coordinates: Coordinates) -> Self {
@@ -40,47 +33,9 @@ impl Unit {
             layer: Layer(5),
             color_fade: ColorFade(Color::WHITE),
             add_handle: AddHandle {
-                image_path: SKELLY_SPRITE_PATH,
                 bundle_type: BundleType::SKELLY,
             },
             z_order: ZOrder,
         }
     }
 }
-
-// impl Command for SpawnUnit {
-//     fn write(self, world: &mut World) {
-//         let asset_server = world.get_resource_mut::<AssetServer>().unwrap();
-//         let asset = asset_server.load("sprites/skelly.png");
-//         let mut meshes = world.get_resource_mut::<Assets<Mesh>>().unwrap();
-//         let mesh = Mesh2dHandle(meshes.add(Mesh::from(shape::Quad::new(Vec2::new(32., 48.)))));
-//         let mut materials = world.get_resource_mut::<Assets<ShaderMaterial>>().unwrap();
-//         let material = materials.add(ShaderMaterial::from(asset));
-//         world.spawn().insert_bundle(Unit {
-//             unit: components::Unit,
-//             // TODO: Make the origin coordinates normalized
-//             origin: Origin(Vec3::new(0.0, 23.0, 0.0)),
-//             coordinates: Coordinates {
-//                 q: self.q,
-//                 r: self.r,
-//             },
-//             layer: Layer(5),
-//             // sprite: ShaderMesh2dBundle {
-//             //     mesh,
-//             //     transform: Transform::default()
-//             //         .with_translation(Vec3::new(0., 0., 20.))
-//             //         .with_scale(Vec3::splat(1.)),
-//             //     material,
-//             //     ..Default::default()
-//             // },
-//             sprite: ShaderMesh2dBundle {
-//                 transform: Transform::default()
-//                     .with_translation(Vec3::new(0., 0., 20.))
-//                     .with_scale(Vec3::splat(1.)),
-//                 material,
-//                 ..Default::default()
-//             },
-//             color_fade: ColorFade(Color::WHITE),
-//         });
-//     }
-// }

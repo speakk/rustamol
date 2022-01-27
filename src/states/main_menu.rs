@@ -36,12 +36,13 @@ impl Plugin for StatePlugin {
 }
 
 //pub fn setup_background_hexes(mut spawn_hex: EventWriter<bundles::SpawnHex>) {
-pub fn setup_background_hexes(mut commands: Commands, asset_server: Res<AssetServer>) {
+pub fn setup_background_hexes(mut commands: Commands) {
     let hexes = models::map::create_grid(35, models::MapShape::Square);
     let mut hex_entities: Vec<Entity> = vec![];
     for hex in hexes {
         //hex_entities.push(commands.add(bundles::SpawnHex { q: hex.q, r: hex.r }));
-        hex_entities.push(bundles::spawn_hex(&hex, &mut commands, &asset_server));
+        //hex_entities.push(bundles::spawn_hex(&hex, &mut commands, &asset_server));
+        hex_entities.push(commands.spawn_bundle(bundles::Hex::new(hex)).id());
     }
 }
 

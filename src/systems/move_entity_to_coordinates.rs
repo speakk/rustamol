@@ -4,8 +4,10 @@ use crate::models::pointy_hex_to_pixel;
 use bevy::prelude::*;
 
 pub fn move_entity_to_coordinates(
-    //mut query: Query<(&Coordinates, &mut Transform, Option<&Origin>), Changed<Coordinates>>,
-    mut query: Query<(&Coordinates, &mut Transform, Option<&Origin>)>,
+    mut query: Query<
+        (&Coordinates, &mut Transform, Option<&Origin>),
+        Or<(Changed<Coordinates>, Added<Transform>)>,
+    >,
 ) {
     for (coordinates, mut transform, origin) in query.iter_mut() {
         let target = pointy_hex_to_pixel(coordinates.q, coordinates.r);
