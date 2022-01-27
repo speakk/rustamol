@@ -9,6 +9,7 @@ use std::collections::HashSet;
 pub type CoordinatesToHex = HashMap<Coordinates, Entity>;
 pub type HexOccupants = HashMap<Coordinates, HashSet<Entity>>;
 
+#[allow(clippy::type_complexity)]
 pub fn hex_map(
     mut map: ResMut<CoordinatesToHex>,
     query: Query<(&Coordinates, Entity), Added<Hex>>,
@@ -24,6 +25,7 @@ pub fn hex_map(
     }
 }
 
+#[allow(clippy::type_complexity)]
 pub fn handle_hex_occupants(
     mut hex_occupants: ResMut<HexOccupants>,
     // TODO: Change With<Unit> to something like With<MapOccupant> if you want to support other
@@ -36,7 +38,7 @@ pub fn handle_hex_occupants(
             r: coordinates.r,
         };
         println!("Occupant insert into {:?}", &hex);
-        let occupants = hex_occupants.entry(hex).or_insert(HashSet::new());
+        let occupants = hex_occupants.entry(hex).or_insert_with(HashSet::new);
         occupants.insert(entity);
     }
 }

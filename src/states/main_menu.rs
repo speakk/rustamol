@@ -122,6 +122,7 @@ pub fn setup_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.insert_resource(menu_buttons as MenuButtons);
 }
 
+#[allow(clippy::type_complexity)]
 fn menu_interact(
     mut state: ResMut<State<AppState>>,
     mut interaction_query: Query<

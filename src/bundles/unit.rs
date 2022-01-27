@@ -33,7 +33,7 @@ impl Unit {
             layer: Layer(5),
             color_fade: ColorFade(Color::WHITE),
             add_handle: AddHandle {
-                bundle_type: BundleType::SKELLY,
+                bundle_type: BundleType::Skelly,
             },
             z_order: ZOrder,
         }

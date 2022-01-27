@@ -1,6 +1,4 @@
 use crate::components::MainCamera;
-//use crate::components::Unit;
-use crate::models::ShaderMaterialPlugin;
 use crate::systems;
 use crate::TIME_STEP;
 use crate::{AFTER, BEFORE};
@@ -15,7 +13,6 @@ impl Plugin for StatePlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(ClearColor(Color::rgb(0.2, 0.15, 0.23)))
             .add_plugins(DefaultPlugins)
-            .add_plugin(ShaderMaterialPlugin)
             .init_resource::<systems::hex_map::CoordinatesToHex>()
             .init_resource::<systems::hex_map::HexOccupants>()
             .init_resource::<systems::path_hilight::LastHoveredCoordinates>()
@@ -42,7 +39,7 @@ impl Plugin for StatePlugin {
                     .with_system(systems::color_fade),
             )
             .add_system_to_stage(AFTER, systems::selected_removal)
-            .add_system(systems::add_shadermesh_bundle)
+            .add_system(systems::add_sprite)
             .add_system(debug_system)
             .add_startup_system(setup)
             .add_startup_system(setup_handles);
@@ -64,8 +61,8 @@ pub static SKELLY_SPRITE_PATH: &str = "sprites/skelly.png";
 
 #[derive(Eq, PartialEq, Hash)]
 pub enum BundleType {
-    SKELLY,
-    HEX,
+    Skelly,
+    Hex,
 }
 
 pub type Quads = HashMap<BundleType, Mesh2dHandle>;
@@ -73,29 +70,17 @@ pub type Images = HashMap<BundleType, Handle<Image>>;
 //pub skelly: Mesh2dHandle,
 //}
 
-pub fn setup_handles(
-    asset_server: Res<AssetServer>,
-    mut meshes: ResMut<Assets<Mesh>>,
-    //mut images: ResMut<Assets<Image>>,
-    images: ResMut<Images>,
-    quads: ResMut<Quads>,
-) {
-    let quads = quads.into_inner();
-    let mesh = Mesh2dHandle(meshes.add(Mesh::from(shape::Quad::new(Vec2::new(32., 48.)))));
-    quads.insert(BundleType::SKELLY, mesh);
-    let mesh = Mesh2dHandle(meshes.add(Mesh::from(shape::Quad::new(Vec2::new(32., 44.)))));
-    quads.insert(BundleType::HEX, mesh);
-
+pub fn setup_handles(asset_server: Res<AssetServer>, images: ResMut<Images>) {
     let images = images.into_inner();
     let image = asset_server.load(HEX_SPRITE_PATH) as Handle<Image>;
-    images.insert(BundleType::HEX, image);
+    images.insert(BundleType::Hex, image);
 
     let image = asset_server.load(SKELLY_SPRITE_PATH) as Handle<Image>;
-    images.insert(BundleType::SKELLY, image);
+    images.insert(BundleType::Skelly, image);
 }
 
 //pub fn debug_system(query: Query<&Mesh2dHandle, With<Unit>>) {
-pub fn debug_system(res: Res<Images>) {
+pub fn debug_system() {
     //println!("Images {}", res.into_inner().len());
     // for transform in query.iter() {
     //     println!("UNIT {:?}", transform.0);

@@ -70,16 +70,16 @@ pub fn axial_round(fraq_q: f32, fraq_r: f32) -> Coordinates {
         r = -q - s;
     }
 
-    return Coordinates {
+    Coordinates {
         q: q as i32,
         r: r as i32,
-    };
+    }
 }
 
 pub fn pixel_to_pointy_hex(x: f32, y: f32) -> Coordinates {
     let q = (3.0_f32.sqrt() / 3.0 * x - 1.0 / 3.0 * y) / HEX_LAYOUT_SIZE_X;
     let r = (2.0 / 3.0 * y) / HEX_LAYOUT_SIZE_Y;
-    return axial_round(q, r);
+    axial_round(q, r)
 }
 
 // pub fn pixel_to_pointy_hex(x: f32, y: f32, origin_x: f32, origin_y: f32) -> Hex {
@@ -123,5 +123,6 @@ pub fn create_grid(radius: i32, shape: MapShape) -> Vec<Coordinates> {
             }
         }
     }
-    return hexes;
+
+    hexes
 }

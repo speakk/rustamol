@@ -3,6 +3,7 @@ use crate::components::Origin;
 use crate::models::pointy_hex_to_pixel;
 use bevy::prelude::*;
 
+#[allow(clippy::type_complexity)]
 pub fn move_entity_to_coordinates(
     mut query: Query<
         (&Coordinates, &mut Transform, Option<&Origin>),

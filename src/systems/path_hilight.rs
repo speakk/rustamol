@@ -19,7 +19,7 @@ pub fn last_hovered_coordinates(
     let hex_coordinates = map::pixel_to_pointy_hex(mouse_position.x, mouse_position.y);
     let hex = coordinates_to_hex.get(&hex_coordinates);
 
-    if let Some(_) = hex {
+    if hex.is_some() {
         *last_hovered_coordinates = Some(hex_coordinates);
     } else {
         *last_hovered_coordinates = None;

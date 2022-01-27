@@ -31,7 +31,7 @@ impl Hex {
             color_fade: ColorFade(Color::WHITE),
             z_order: ZOrder,
             add_handle: AddHandle {
-                bundle_type: BundleType::HEX,
+                bundle_type: BundleType::Hex,
             },
         }
     }
