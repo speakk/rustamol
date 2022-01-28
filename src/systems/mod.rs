@@ -27,3 +27,6 @@ pub use path_hilight::*;
 
 pub mod add_handle;
 pub use add_handle::*;
+
+pub mod follow_path;
+pub use follow_path::*;

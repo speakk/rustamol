@@ -30,6 +30,7 @@ impl Plugin for StatePlugin {
             )
             .add_system(systems::z_order)
             .add_system(systems::hex_map)
+            .add_system(systems::follow_path)
             .add_system(systems::move_entity_to_coordinates)
             .add_system(systems::hex_hilight.after("input"))
             .add_system_set_to_stage(

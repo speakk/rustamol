@@ -1,4 +1,6 @@
 use crate::states::BundleType;
+use bevy::core::Timer;
+use bevy::ecs::bundle::Bundle;
 use bevy::ecs::component::Component;
 use bevy::math::Vec3;
 use bevy::render::color::Color;
@@ -36,4 +38,36 @@ pub struct ZOrder;
 #[derive(Component)]
 pub struct AddHandle {
     pub bundle_type: BundleType,
+}
+
+#[derive(Component)]
+pub struct Path(pub Vec<Coordinates>);
+
+impl Default for Path {
+    fn default() -> Self {
+        Path(vec![])
+    }
+}
+
+#[derive(Component)]
+pub struct PathTimer(pub Timer);
+
+#[derive(Component)]
+pub struct PathCurrentIndex(pub usize);
+
+#[derive(Bundle)]
+pub struct TimedPath {
+    pub path: Path,
+    pub timer: PathTimer,
+    pub current_index: PathCurrentIndex,
+}
+
+impl TimedPath {
+    pub fn new(path: Path, timer: Option<PathTimer>) -> Self {
+        TimedPath {
+            path,
+            timer: timer.unwrap_or(PathTimer(Timer::from_seconds(0.5, true))),
+            current_index: PathCurrentIndex(0),
+        }
+    }
 }
