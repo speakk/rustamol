@@ -1,6 +1,10 @@
+//use crate::commands;
+use crate::commands::MoveEntity;
+use crate::commands::TurnCommand;
 use crate::components::*;
-use crate::models::path_finding;
-use crate::systems::CoordinatesToHex;
+use crate::systems::CurrentTurn;
+// use crate::models::path_finding;
+// use crate::systems::CoordinatesToHex;
 use crate::systems::HexOccupants;
 use crate::systems::MouseWorldCoordinates;
 use bevy::prelude::*;
@@ -12,10 +16,13 @@ pub fn click_handler(
     mouse_button_input: Res<Input<MouseButton>>,
     mouse_world_coordinates: Res<MouseWorldCoordinates>,
     hex_occupants: Res<HexOccupants>,
-    coordinates_to_hex: Res<CoordinatesToHex>,
+    //coordinates_to_hex: Res<CoordinatesToHex>,
     mut selected_query: Query<Entity, With<Selected>>,
     mut sprite_query: Query<&mut Sprite>,
     coordinates_query: Query<&Coordinates>,
+    //mut move_entity: EventWriter<MoveEntity>,
+    mut turn_commands: EventWriter<TurnCommand<MoveEntity>>,
+    current_turn: Res<CurrentTurn>,
 ) {
     if mouse_button_input.just_pressed(MouseButton::Left) {
         let position = mouse_world_coordinates;
@@ -36,18 +43,30 @@ pub fn click_handler(
             }
         } else {
             for entity in selected_query.iter_mut() {
+                turn_commands.send(TurnCommand {
+                    command: Box::new(MoveEntity {
+                        from: *coordinates_query.get(entity).unwrap(),
+                        to: coordinates,
+                    }),
+                    team: current_turn.0,
+                });
+                // move_entity.send(MoveEntity {
+                //     from: *coordinates_query.get(entity).unwrap(),
+                //     to: coordinates,
+                // });
+
                 //commands.entity(entity).insert
-                let path = path_finding::get_path(
-                    *coordinates_query.get(entity).unwrap(),
-                    coordinates,
-                    &*coordinates_to_hex,
-                    &*hex_occupants,
-                );
-                if let Some(path) = path {
-                    commands
-                        .entity(entity)
-                        .insert_bundle(TimedPath::new(Path(path), None));
-                }
+                //let path = path_finding::get_path(
+                //    *coordinates_query.get(entity).unwrap(),
+                //    coordinates,
+                //    &*coordinates_to_hex,
+                //    &*hex_occupants,
+                //);
+                //if let Some(path) = path {
+                //    commands
+                //        .entity(entity)
+                //        .insert_bundle(TimedPath::new(Path(path), None));
+                //}
             }
         }
     }

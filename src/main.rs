@@ -1,8 +1,11 @@
+#![feature(box_patterns)]
+
 use bevy::prelude::*;
 
 #[macro_use]
 
 mod bundles;
+mod commands;
 mod components;
 mod models;
 mod states;

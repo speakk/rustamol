@@ -66,7 +66,7 @@ impl TimedPath {
     pub fn new(path: Path, timer: Option<PathTimer>) -> Self {
         TimedPath {
             path,
-            timer: timer.unwrap_or(PathTimer(Timer::from_seconds(0.5, true))),
+            timer: timer.unwrap_or(PathTimer(Timer::from_seconds(0.05, true))),
             current_index: PathCurrentIndex(0),
         }
     }

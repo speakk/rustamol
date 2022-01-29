@@ -1,7 +1,10 @@
 use crate::bundles;
+use crate::commands::MoveEntity;
+use crate::commands::TurnCommand;
 use crate::components::Coordinates;
 use crate::models;
 use crate::systems;
+use crate::systems::CurrentTurn;
 use crate::AppState;
 use bevy::prelude::*;
 
@@ -16,9 +19,12 @@ impl Plugin for StatePlugin {
                 .with_system(systems::click_handler)
                 .with_system(systems::selected)
                 .with_system(systems::find_path_hilight)
+                .with_system(systems::turn_command)
                 .with_system(systems::path_hilight)
                 .with_system(systems::handle_hex_occupants),
         );
+        app.init_resource::<CurrentTurn>();
+        app.add_event::<TurnCommand<MoveEntity>>();
     }
 }
 
