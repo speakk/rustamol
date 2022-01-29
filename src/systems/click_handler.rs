@@ -1,6 +1,6 @@
-//use crate::commands;
 use crate::commands::MoveEntity;
 use crate::commands::TurnCommand;
+use crate::commands::TurnCommandEvent;
 use crate::components::*;
 //use crate::systems::CurrentTurn;
 // use crate::models::path_finding;
@@ -20,7 +20,7 @@ pub fn click_handler(
     mut selected_query: Query<Entity, With<Selected>>,
     mut sprite_query: Query<&mut Sprite>,
     coordinates_query: Query<&Coordinates>,
-    mut turn_commands: EventWriter<TurnCommand<MoveEntity>>,
+    mut turn_commands: EventWriter<TurnCommandEvent>,
     player_controlled: Query<Entity, With<PlayerControlled>>,
 ) {
     if mouse_button_input.just_pressed(MouseButton::Left) {
@@ -42,8 +42,8 @@ pub fn click_handler(
             }
         } else {
             for entity in selected_query.iter_mut() {
-                turn_commands.send(TurnCommand {
-                    command: Box::new(MoveEntity {
+                turn_commands.send(TurnCommandEvent {
+                    command: TurnCommand::MoveEntity(MoveEntity {
                         from: *coordinates_query.get(entity).unwrap(),
                         to: coordinates,
                     }),
