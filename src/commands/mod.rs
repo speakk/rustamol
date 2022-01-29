@@ -10,7 +10,7 @@ pub enum TurnCommand {
     MoveEntity(MoveEntity),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct MoveEntity {
     pub from: Coordinates,
     pub to: Coordinates,

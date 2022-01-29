@@ -17,7 +17,7 @@ pub fn last_hovered_coordinates(
     coordinates_to_hex: Res<CoordinatesToHex>,
 ) {
     let hex_coordinates = map::pixel_to_pointy_hex(mouse_position.x, mouse_position.y);
-    let hex = coordinates_to_hex.get(&hex_coordinates);
+    let hex = coordinates_to_hex.0.get(&hex_coordinates);
 
     if hex.is_some() {
         *last_hovered_coordinates = Some(hex_coordinates);
@@ -61,7 +61,7 @@ pub fn path_hilight(
 ) {
     if let Some(hilighted_path) = hilighted_path.into_inner() {
         for coordinate in hilighted_path.iter() {
-            let entity = coordinates_to_hex.get(coordinate);
+            let entity = coordinates_to_hex.0.get(coordinate);
             if let Some(entity) = entity {
                 if let Ok(mut sprite) = query.get_mut(*entity) {
                     sprite.color.set_b(0.3);

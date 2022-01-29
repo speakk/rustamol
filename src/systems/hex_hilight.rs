@@ -11,7 +11,7 @@ pub fn hex_hilight(
 ) {
     let position = mouse_world_coordinates;
     let coordinates = map::pixel_to_pointy_hex(position.x, position.y);
-    if let Some(entity) = coordinates_to_hex.get(&coordinates) {
+    if let Some(entity) = coordinates_to_hex.0.get(&coordinates) {
         if let Ok(mut sprite) = query.get_mut(*entity) {
             sprite.color.set_r(1.0);
             sprite.color.set_g(0.6);

@@ -19,8 +19,14 @@ impl Coordinates {
                 q: q + dir.q,
                 r: r + dir.r,
             })
-            .filter(|coord| coordinates_to_hex.contains_key(coord))
-            .filter(|coord| !hex_occupants.contains_key(coord))
+            .filter(|coord| coordinates_to_hex.0.contains_key(coord))
+            .filter(|coord| {
+                !hex_occupants
+                    .0
+                    .get(coord)
+                    .filter(|occupants| occupants.len() > 0)
+                    .is_some()
+            })
             .collect();
 
         nodes

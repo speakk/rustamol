@@ -1,5 +1,5 @@
 use crate::bundles;
-//use crate::commands::MoveEntity;
+use crate::commands::MoveEntity;
 use crate::commands::TurnCommandEvent;
 use crate::components::*;
 use crate::models;
@@ -21,11 +21,13 @@ impl Plugin for StatePlugin {
                 .with_system(systems::start_turn)
                 .with_system(systems::find_path_hilight)
                 .with_system(systems::turn_command)
+                .with_system(systems::move_entity)
                 .with_system(systems::path_hilight)
                 .with_system(systems::handle_hex_occupants),
         );
         app.init_resource::<CurrentTurn>();
         app.add_event::<TurnCommandEvent>();
+        app.add_event::<MoveEntity>();
         app.add_event::<systems::turn::StartTurn>();
     }
 }

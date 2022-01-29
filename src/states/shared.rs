@@ -1,5 +1,7 @@
 use crate::components::MainCamera;
 use crate::systems;
+use crate::systems::CoordinatesChanged;
+use crate::systems::PlaceEntity;
 use crate::TIME_STEP;
 use crate::{AFTER, BEFORE};
 use bevy::core::FixedTimestep;
@@ -31,7 +33,9 @@ impl Plugin for StatePlugin {
             .add_system(systems::z_order)
             .add_system(systems::hex_map)
             .add_system(systems::follow_path)
-            .add_system(systems::move_entity_to_coordinates)
+            .add_system(systems::place_entity_in_coordinate)
+            .add_system(systems::detect_coordinates_added)
+            .add_system(systems::update_translation_from_coordinates)
             .add_system(systems::hex_hilight.after("input"))
             .add_system_set_to_stage(
                 BEFORE,
@@ -42,6 +46,8 @@ impl Plugin for StatePlugin {
             .add_system_to_stage(AFTER, systems::selected_removal)
             .add_system(systems::add_sprite)
             .add_system(debug_system)
+            .add_event::<CoordinatesChanged>()
+            .add_event::<PlaceEntity>()
             .add_startup_system(setup)
             .add_startup_system(setup_handles);
     }

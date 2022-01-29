@@ -4,7 +4,7 @@ use crate::models::pointy_hex_to_pixel;
 use bevy::prelude::*;
 
 #[allow(clippy::type_complexity)]
-pub fn move_entity_to_coordinates(
+pub fn update_translation_from_coordinates(
     mut query: Query<
         (&Coordinates, &mut Transform, Option<&Origin>),
         Or<(Changed<Coordinates>, Added<Transform>)>,

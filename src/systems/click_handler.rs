@@ -27,9 +27,9 @@ pub fn click_handler(
         let position = mouse_world_coordinates;
         let coordinates = map::pixel_to_pointy_hex(position.x, position.y);
         //let hex = coordinates_to_hex.get(&coordinates);
-        let occupants = hex_occupants.get(&coordinates);
+        let occupants = hex_occupants.0.get(&coordinates);
 
-        if let Some(occupants) = occupants {
+        if let Some(occupants) = occupants.filter(|list| list.len() > 0) {
             for entity in selected_query.iter_mut() {
                 commands.entity(entity).remove::<Selected>();
             }

@@ -13,8 +13,8 @@ pub use mouse_world_coordinates::*;
 pub mod color_fade;
 pub use color_fade::*;
 
-pub mod move_entity_to_coordinates;
-pub use move_entity_to_coordinates::*;
+pub mod update_translation_from_coordinates;
+pub use update_translation_from_coordinates::*;
 
 pub mod click_handler;
 pub use click_handler::*;
@@ -36,3 +36,9 @@ pub use turn::*;
 
 pub mod turn_command;
 pub use turn_command::*;
+
+pub mod move_entity;
+pub use move_entity::*;
+
+pub mod place_entity_in_coordinate;
+pub use place_entity_in_coordinate::*;
