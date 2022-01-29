@@ -5,7 +5,14 @@ use crate::models::path_finding;
 use crate::systems::CoordinatesToHex;
 use crate::systems::HexOccupants;
 use bevy::prelude::*;
-// use crate::systems::CoordinatesToHex;
+//use core::any::Any;
+
+// fn validate_command(current_turn: Entity, command: TurnCommand) -> bool {
+//     match command.team {
+//         Some(team) => current_turn == team,
+//         None => false,
+//     }
+// }
 
 // MOVE ENTITY
 pub fn turn_command(

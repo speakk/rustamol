@@ -40,14 +40,8 @@ pub struct AddHandle {
     pub bundle_type: BundleType,
 }
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct Path(pub Vec<Coordinates>);
-
-impl Default for Path {
-    fn default() -> Self {
-        Path(vec![])
-    }
-}
 
 #[derive(Component)]
 pub struct PathTimer(pub Timer);
@@ -66,8 +60,14 @@ impl TimedPath {
     pub fn new(path: Path, timer: Option<PathTimer>) -> Self {
         TimedPath {
             path,
-            timer: timer.unwrap_or(PathTimer(Timer::from_seconds(0.05, true))),
+            timer: timer.unwrap_or_else(|| PathTimer(Timer::from_seconds(0.05, true))),
             current_index: PathCurrentIndex(0),
         }
     }
 }
+
+#[derive(Component)]
+pub struct Team;
+
+#[derive(Component)]
+pub struct PlayerControlled;

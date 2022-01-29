@@ -2,7 +2,7 @@
 use crate::commands::MoveEntity;
 use crate::commands::TurnCommand;
 use crate::components::*;
-use crate::systems::CurrentTurn;
+//use crate::systems::CurrentTurn;
 // use crate::models::path_finding;
 // use crate::systems::CoordinatesToHex;
 use crate::systems::HexOccupants;
@@ -11,18 +11,17 @@ use bevy::prelude::*;
 
 use crate::models::map;
 
+#[allow(clippy::too_many_arguments)]
 pub fn click_handler(
     mut commands: Commands,
     mouse_button_input: Res<Input<MouseButton>>,
     mouse_world_coordinates: Res<MouseWorldCoordinates>,
     hex_occupants: Res<HexOccupants>,
-    //coordinates_to_hex: Res<CoordinatesToHex>,
     mut selected_query: Query<Entity, With<Selected>>,
     mut sprite_query: Query<&mut Sprite>,
     coordinates_query: Query<&Coordinates>,
-    //mut move_entity: EventWriter<MoveEntity>,
     mut turn_commands: EventWriter<TurnCommand<MoveEntity>>,
-    current_turn: Res<CurrentTurn>,
+    player_controlled: Query<Entity, With<PlayerControlled>>,
 ) {
     if mouse_button_input.just_pressed(MouseButton::Left) {
         let position = mouse_world_coordinates;
@@ -48,25 +47,8 @@ pub fn click_handler(
                         from: *coordinates_query.get(entity).unwrap(),
                         to: coordinates,
                     }),
-                    team: current_turn.0,
+                    team: player_controlled.get_single().ok(),
                 });
-                // move_entity.send(MoveEntity {
-                //     from: *coordinates_query.get(entity).unwrap(),
-                //     to: coordinates,
-                // });
-
-                //commands.entity(entity).insert
-                //let path = path_finding::get_path(
-                //    *coordinates_query.get(entity).unwrap(),
-                //    coordinates,
-                //    &*coordinates_to_hex,
-                //    &*hex_occupants,
-                //);
-                //if let Some(path) = path {
-                //    commands
-                //        .entity(entity)
-                //        .insert_bundle(TimedPath::new(Path(path), None));
-                //}
             }
         }
     }
