@@ -12,7 +12,8 @@ pub struct CoordinatesToHex(pub HashMap<Coordinates, Entity>);
 #[derive(Default)]
 pub struct HexOccupants(pub HashMap<Coordinates, HashSet<Entity>>);
 
-#[allow(clippy::type_complexity)]
+pub struct DespawnHex(pub Entity);
+
 pub fn hex_map(
     mut map: ResMut<CoordinatesToHex>,
     query: Query<(&Coordinates, Entity), Added<Hex>>,
@@ -25,6 +26,27 @@ pub fn hex_map(
             },
             entity,
         );
+    }
+}
+
+pub fn despawn_hex(
+    mut map: ResMut<CoordinatesToHex>,
+    mut events: EventReader<DespawnHex>,
+    coordinates_query: Query<&Coordinates>,
+    mut commands: Commands,
+) {
+    for event in events.iter() {
+        let coordinates = coordinates_query
+            .get(event.0)
+            .expect("No coordinates on hex on entity removal");
+        let hex = map
+            .0
+            .get(coordinates)
+            .expect("Tried to remove hex from where there was none");
+        if hex == &event.0 {
+            map.0.remove(coordinates);
+        }
+        commands.entity(event.0).despawn();
     }
 }
 

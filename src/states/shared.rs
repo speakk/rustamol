@@ -1,6 +1,7 @@
 use crate::components::MainCamera;
 use crate::systems;
 use crate::systems::CoordinatesChanged;
+use crate::systems::DespawnHex;
 use crate::systems::PlaceEntity;
 use crate::TIME_STEP;
 use crate::{AFTER, BEFORE};
@@ -32,6 +33,8 @@ impl Plugin for StatePlugin {
             )
             .add_system(systems::z_order)
             .add_system(systems::hex_map)
+            .add_event::<DespawnHex>()
+            .add_system(systems::despawn_hex)
             .add_system(systems::follow_path)
             .add_system(systems::place_entity_in_coordinate)
             .add_system(systems::detect_coordinates_added)

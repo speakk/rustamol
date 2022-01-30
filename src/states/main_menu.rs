@@ -1,6 +1,7 @@
 use crate::bundles;
 use crate::components::Hex;
 use crate::models;
+use crate::systems::DespawnHex;
 use crate::AppState;
 use bevy::app::AppExit;
 use bevy::prelude::*;
@@ -163,11 +164,13 @@ fn cleanup_menu(
     mut commands: Commands,
     menu_buttons: Res<MenuButtons>,
     mut hexes: Query<Entity, With<Hex>>,
+    mut despawn_hex: EventWriter<DespawnHex>,
 ) {
     commands
         .entity(*menu_buttons.into_inner())
         .despawn_recursive();
     for entity in hexes.iter_mut() {
-        commands.entity(entity).despawn();
+        //commands.entity(entity).despawn();
+        despawn_hex.send(DespawnHex(entity));
     }
 }
