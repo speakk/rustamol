@@ -21,11 +21,11 @@ impl Coordinates {
             })
             .filter(|coord| coordinates_to_hex.0.contains_key(coord))
             .filter(|coord| {
-                !hex_occupants
+                hex_occupants
                     .0
                     .get(coord)
-                    .filter(|occupants| occupants.len() > 0)
-                    .is_some()
+                    .filter(|occupants| !occupants.is_empty())
+                    .is_none()
             })
             .collect();
 

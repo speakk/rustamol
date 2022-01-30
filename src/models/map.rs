@@ -77,25 +77,12 @@ pub fn axial_round(fraq_q: f32, fraq_r: f32) -> Coordinates {
 }
 
 pub fn pixel_to_pointy_hex(x: f32, y: f32) -> Coordinates {
-    // let q = (3.0_f32.sqrt() / 3.0 * x - 1.0 / 3.0 * y) / HEX_LAYOUT_SIZE_X;
-    // let r = (2.0 / 3.0 * y) / HEX_LAYOUT_SIZE_Y;
-    // let q = (3.0_f32.sqrt() / 3.0 * x - 1.0 / 3.0 * y) / HEX_LAYOUT_SIZE_X;
-    // let r = (2.0 / 3.0 * y) / HEX_LAYOUT_SIZE_Y;
     let x = x / HEX_LAYOUT_SIZE_X;
     let y = y / HEX_LAYOUT_SIZE_Y;
     let q = POINTY_HEX_MATRIX.b0 * x + POINTY_HEX_MATRIX.b1 * y;
     let r = POINTY_HEX_MATRIX.b2 * x + POINTY_HEX_MATRIX.b3 * y;
     axial_round(q, r)
 }
-
-// pub fn pixel_to_pointy_hex(x: f32, y: f32, origin_x: f32, origin_y: f32) -> Hex {
-//     let final_x: f32 = (x - origin_x) / HEX_LAYOUT_SIZE_X;
-//     let final_y: f32 = (y - origin_y) / HEX_LAYOUT_SIZE_Y;
-//     let q: i32 = (POINTY_HEX_MATRIX.b0 * final_x + POINTY_HEX_MATRIX.b1 * final_y).round() as i32;
-//     let r: i32 = (POINTY_HEX_MATRIX.b2 * final_x + POINTY_HEX_MATRIX.b3 * final_y).round() as i32;
-//
-//     Hex { q, r }
-// }
 
 pub enum MapShape {
     Hexagonal,

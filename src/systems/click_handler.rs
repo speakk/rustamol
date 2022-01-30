@@ -29,7 +29,7 @@ pub fn click_handler(
         //let hex = coordinates_to_hex.get(&coordinates);
         let occupants = hex_occupants.0.get(&coordinates);
 
-        if let Some(occupants) = occupants.filter(|list| list.len() > 0) {
+        if let Some(occupants) = occupants.filter(|list| !list.is_empty()) {
             for entity in selected_query.iter_mut() {
                 commands.entity(entity).remove::<Selected>();
             }
