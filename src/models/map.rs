@@ -11,10 +11,10 @@ pub struct Matrix {
     f1: f32,
     f2: f32,
     f3: f32,
-    // b0: f32,
-    // b1: f32,
-    // b2: f32,
-    // b3: f32,
+    b0: f32,
+    b1: f32,
+    b2: f32,
+    b3: f32,
 }
 
 lazy_static::lazy_static! {
@@ -23,10 +23,10 @@ lazy_static::lazy_static! {
         f1: 3_f32.sqrt() / 2.0,
         f2: 0.0,
         f3: 3.0 / 2.0,
-        // b0: 3_f32.sqrt() / 3.0,
-        // b1: -1.0 / 3.0,
-        // b2: 0.0,
-        // b3: 2.0 / 3.0,
+        b0: 3_f32.sqrt() / 3.0,
+        b1: -1.0 / 3.0,
+        b2: 0.0,
+        b3: 2.0 / 3.0,
     };
 }
 
@@ -77,8 +77,14 @@ pub fn axial_round(fraq_q: f32, fraq_r: f32) -> Coordinates {
 }
 
 pub fn pixel_to_pointy_hex(x: f32, y: f32) -> Coordinates {
-    let q = (3.0_f32.sqrt() / 3.0 * x - 1.0 / 3.0 * y) / HEX_LAYOUT_SIZE_X;
-    let r = (2.0 / 3.0 * y) / HEX_LAYOUT_SIZE_Y;
+    // let q = (3.0_f32.sqrt() / 3.0 * x - 1.0 / 3.0 * y) / HEX_LAYOUT_SIZE_X;
+    // let r = (2.0 / 3.0 * y) / HEX_LAYOUT_SIZE_Y;
+    // let q = (3.0_f32.sqrt() / 3.0 * x - 1.0 / 3.0 * y) / HEX_LAYOUT_SIZE_X;
+    // let r = (2.0 / 3.0 * y) / HEX_LAYOUT_SIZE_Y;
+    let x = x / HEX_LAYOUT_SIZE_X;
+    let y = y / HEX_LAYOUT_SIZE_Y;
+    let q = POINTY_HEX_MATRIX.b0 * x + POINTY_HEX_MATRIX.b1 * y;
+    let r = POINTY_HEX_MATRIX.b2 * x + POINTY_HEX_MATRIX.b3 * y;
     axial_round(q, r)
 }
 
