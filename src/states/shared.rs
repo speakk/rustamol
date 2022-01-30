@@ -68,11 +68,13 @@ pub fn setup(mut commands: Commands, mut windows: ResMut<Windows>) {
 
 pub static HEX_SPRITE_PATH: &str = "sprites/hexagon.png";
 pub static SKELLY_SPRITE_PATH: &str = "sprites/skelly.png";
+pub static STABBY_SPRITE_PATH: &str = "sprites/stabby.png";
 
 #[derive(Eq, PartialEq, Hash)]
 pub enum BundleType {
     Skelly,
     Hex,
+    Stabby,
 }
 
 pub type Quads = HashMap<BundleType, Mesh2dHandle>;
@@ -87,6 +89,9 @@ pub fn setup_handles(asset_server: Res<AssetServer>, images: ResMut<Images>) {
 
     let image = asset_server.load(SKELLY_SPRITE_PATH) as Handle<Image>;
     images.insert(BundleType::Skelly, image);
+
+    let image = asset_server.load(STABBY_SPRITE_PATH) as Handle<Image>;
+    images.insert(BundleType::Stabby, image);
 }
 
 //pub fn debug_system(query: Query<&Mesh2dHandle, With<Unit>>) {

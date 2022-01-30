@@ -2,6 +2,7 @@ use crate::states::BundleType;
 use bevy::core::Timer;
 use bevy::ecs::bundle::Bundle;
 use bevy::ecs::component::Component;
+use bevy::ecs::entity::Entity;
 use bevy::math::Vec3;
 use bevy::render::color::Color;
 
@@ -76,3 +77,8 @@ pub struct PlayerControlled;
 
 #[derive(Component)]
 pub struct AiControlled;
+
+#[derive(Component)]
+pub struct IsInTeam {
+    pub team: Entity,
+}

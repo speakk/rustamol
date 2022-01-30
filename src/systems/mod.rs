@@ -48,3 +48,6 @@ pub use place_entity_in_coordinate::*;
 
 pub mod ai;
 pub use ai::*;
+
+pub mod attack;
+pub use attack::*;

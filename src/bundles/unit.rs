@@ -23,8 +23,13 @@ pub struct Unit {
     pub z_order: ZOrder,
 }
 
+pub enum UnitType {
+    Skelly,
+    Stabby,
+}
+
 impl Unit {
-    pub fn new(coordinates: Coordinates) -> Self {
+    pub fn new(coordinates: Coordinates, unit_type: UnitType) -> Self {
         Unit {
             unit: components::Unit,
             // TODO: Make the origin coordinates normalized
@@ -33,7 +38,10 @@ impl Unit {
             layer: Layer(5),
             color_fade: ColorFade(Color::WHITE),
             add_handle: AddHandle {
-                bundle_type: BundleType::Skelly,
+                bundle_type: match unit_type {
+                    UnitType::Skelly => BundleType::Skelly,
+                    UnitType::Stabby => BundleType::Stabby,
+                },
             },
             z_order: ZOrder,
         }

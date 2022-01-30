@@ -9,10 +9,17 @@ pub struct TurnCommandEvent {
 pub enum TurnCommand {
     MoveEntity(MoveEntity),
     EndTurn(EndTurn),
+    Attack(Attack),
 }
 
 #[derive(Debug, Copy, Clone)]
 pub struct MoveEntity {
+    pub from: Coordinates,
+    pub to: Coordinates,
+}
+
+#[derive(Debug, Copy, Clone)]
+pub struct Attack {
     pub from: Coordinates,
     pub to: Coordinates,
 }

@@ -1,4 +1,6 @@
 use crate::bundles;
+use crate::bundles::UnitType;
+use crate::commands::Attack;
 use crate::commands::EndTurn;
 use crate::commands::MoveEntity;
 use crate::commands::TurnCommandEvent;
@@ -30,6 +32,7 @@ impl Plugin for StatePlugin {
                 .with_system(systems::turn_command)
                 .with_system(systems::move_entity)
                 .with_system(systems::ai)
+                .with_system(systems::attack)
                 .with_system(systems::path_hilight)
                 .with_system(systems::handle_hex_occupants)
                 .with_system(update_team_text),
@@ -38,6 +41,7 @@ impl Plugin for StatePlugin {
         .add_event::<TurnCommandEvent>()
         .add_event::<MoveEntity>()
         .add_event::<EndTurn>()
+        .add_event::<Attack>()
         .add_event::<systems::turn::StartTurn>()
         .add_event::<systems::turn::TurnStarted>();
 
@@ -58,13 +62,6 @@ pub fn setup(mut commands: Commands, mut start_turn: EventWriter<systems::turn::
         commands.spawn_bundle(bundles::Hex::new(hex));
     }
 
-    commands.spawn_bundle(bundles::Unit::new(Coordinates { q: 0, r: -2 }));
-    commands.spawn_bundle(bundles::Unit::new(Coordinates { q: 2, r: 0 }));
-    commands.spawn_bundle(bundles::Unit::new(Coordinates { q: 2, r: 1 }));
-    commands.spawn_bundle(bundles::Unit::new(Coordinates { q: 1, r: 2 }));
-    commands.spawn_bundle(bundles::Unit::new(Coordinates { q: 3, r: 1 }));
-    commands.spawn_bundle(bundles::Unit::new(Coordinates { q: 0, r: -4 }));
-
     let team1 = commands
         .spawn()
         .insert(Team {
@@ -72,12 +69,51 @@ pub fn setup(mut commands: Commands, mut start_turn: EventWriter<systems::turn::
         })
         .insert(PlayerControlled)
         .id();
-    commands
+
+    let team2 = commands
         .spawn()
         .insert(Team {
             name: "AI".to_string(),
         })
-        .insert(AiControlled);
+        .insert(AiControlled)
+        .id();
+
+    commands
+        .spawn_bundle(bundles::Unit::new(
+            Coordinates { q: 0, r: -2 },
+            UnitType::Stabby,
+        ))
+        .insert(IsInTeam { team: team1 });
+    commands
+        .spawn_bundle(bundles::Unit::new(
+            Coordinates { q: 2, r: 0 },
+            UnitType::Stabby,
+        ))
+        .insert(IsInTeam { team: team1 });
+    commands
+        .spawn_bundle(bundles::Unit::new(
+            Coordinates { q: 2, r: 1 },
+            UnitType::Stabby,
+        ))
+        .insert(IsInTeam { team: team1 });
+    commands
+        .spawn_bundle(bundles::Unit::new(
+            Coordinates { q: 1, r: 2 },
+            UnitType::Stabby,
+        ))
+        .insert(IsInTeam { team: team1 });
+    commands
+        .spawn_bundle(bundles::Unit::new(
+            Coordinates { q: 3, r: 1 },
+            UnitType::Skelly,
+        ))
+        .insert(IsInTeam { team: team2 });
+    commands
+        .spawn_bundle(bundles::Unit::new(
+            Coordinates { q: 0, r: -4 },
+            UnitType::Skelly,
+        ))
+        .insert(IsInTeam { team: team2 });
 
     start_turn.send(systems::turn::StartTurn { team: team1 });
 }

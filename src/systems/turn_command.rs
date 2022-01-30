@@ -14,6 +14,7 @@ pub fn turn_command(
     current_turn: Res<CurrentTurn>,
     mut move_entity_event: EventWriter<MoveEntity>,
     mut end_turn_event: EventWriter<EndTurn>,
+    mut attack_event: EventWriter<Attack>,
 ) {
     for event in events.iter() {
         if validate_command(current_turn.0.expect("No current turn?"), event) {
@@ -23,6 +24,9 @@ pub fn turn_command(
                 }
                 TurnCommand::EndTurn(end_turn) => {
                     end_turn_event.send(end_turn);
+                }
+                TurnCommand::Attack(attack) => {
+                    attack_event.send(attack);
                 }
             }
         } else {
