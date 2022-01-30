@@ -63,8 +63,7 @@ pub fn handle_hex_occupants(
         if units.get(event.entity).is_ok() {
             if let Some(from) = event.from {
                 let occupants = hex_occupants.0.entry(from).or_insert_with(HashSet::new);
-                let hmm = occupants.remove(&event.entity);
-                println!("Removed! {}", hmm);
+                occupants.remove(&event.entity);
             }
             let occupants = hex_occupants.0.entry(event.to).or_insert_with(HashSet::new);
             occupants.insert(event.entity);

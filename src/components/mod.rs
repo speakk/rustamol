@@ -67,7 +67,9 @@ impl TimedPath {
 }
 
 #[derive(Component)]
-pub struct Team;
+pub struct Team {
+    pub name: String,
+}
 
 #[derive(Component)]
 pub struct PlayerControlled;
