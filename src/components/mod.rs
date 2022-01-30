@@ -73,3 +73,6 @@ pub struct Team {
 
 #[derive(Component)]
 pub struct PlayerControlled;
+
+#[derive(Component)]
+pub struct AiControlled;

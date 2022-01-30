@@ -9,17 +9,20 @@ fn validate_command(current_turn: Entity, event: &TurnCommandEvent) -> bool {
     }
 }
 
-// MOVE ENTITY
 pub fn turn_command(
     mut events: EventReader<TurnCommandEvent>,
     current_turn: Res<CurrentTurn>,
     mut move_entity_event: EventWriter<MoveEntity>,
+    mut end_turn_event: EventWriter<EndTurn>,
 ) {
     for event in events.iter() {
         if validate_command(current_turn.0.expect("No current turn?"), event) {
             match event.command {
                 TurnCommand::MoveEntity(move_entity) => {
                     move_entity_event.send(move_entity);
+                }
+                TurnCommand::EndTurn(end_turn) => {
+                    end_turn_event.send(end_turn);
                 }
             }
         } else {

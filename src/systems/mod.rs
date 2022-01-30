@@ -19,6 +19,9 @@ pub use update_translation_from_coordinates::*;
 pub mod click_handler;
 pub use click_handler::*;
 
+pub mod keyboard_handler;
+pub use keyboard_handler::*;
+
 pub mod selected;
 pub use selected::*;
 
@@ -42,3 +45,6 @@ pub use move_entity::*;
 
 pub mod place_entity_in_coordinate;
 pub use place_entity_in_coordinate::*;
+
+pub mod ai;
+pub use ai::*;

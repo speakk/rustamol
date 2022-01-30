@@ -1,4 +1,5 @@
 use crate::bundles;
+use crate::commands::EndTurn;
 use crate::commands::MoveEntity;
 use crate::commands::TurnCommandEvent;
 use crate::components::*;
@@ -23,9 +24,12 @@ impl Plugin for StatePlugin {
                 .with_system(systems::click_handler)
                 .with_system(systems::selected)
                 .with_system(systems::start_turn)
+                .with_system(systems::end_turn)
                 .with_system(systems::find_path_hilight)
+                .with_system(systems::keyboard_handler)
                 .with_system(systems::turn_command)
                 .with_system(systems::move_entity)
+                .with_system(systems::ai)
                 .with_system(systems::path_hilight)
                 .with_system(systems::handle_hex_occupants)
                 .with_system(update_team_text),
@@ -33,7 +37,9 @@ impl Plugin for StatePlugin {
         .init_resource::<CurrentTurn>()
         .add_event::<TurnCommandEvent>()
         .add_event::<MoveEntity>()
-        .add_event::<systems::turn::StartTurn>();
+        .add_event::<EndTurn>()
+        .add_event::<systems::turn::StartTurn>()
+        .add_event::<systems::turn::TurnStarted>();
 
         let world = &mut app.world;
         let asset_server = world.get_resource_mut::<AssetServer>().unwrap();
@@ -66,9 +72,12 @@ pub fn setup(mut commands: Commands, mut start_turn: EventWriter<systems::turn::
         })
         .insert(PlayerControlled)
         .id();
-    commands.spawn().insert(Team {
-        name: "AI".to_string(),
-    });
+    commands
+        .spawn()
+        .insert(Team {
+            name: "AI".to_string(),
+        })
+        .insert(AiControlled);
 
     start_turn.send(systems::turn::StartTurn { team: team1 });
 }

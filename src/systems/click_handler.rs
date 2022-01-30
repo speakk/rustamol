@@ -26,7 +26,6 @@ pub fn click_handler(
     if mouse_button_input.just_pressed(MouseButton::Left) {
         let position = mouse_world_coordinates;
         let coordinates = map::pixel_to_pointy_hex(position.x, position.y);
-        //let hex = coordinates_to_hex.get(&coordinates);
         let occupants = hex_occupants.0.get(&coordinates);
 
         if let Some(occupants) = occupants.filter(|list| !list.is_empty()) {
