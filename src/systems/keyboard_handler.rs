@@ -1,5 +1,4 @@
 use crate::commands::EndTurn;
-use crate::commands::TurnCommand;
 use crate::commands::TurnCommandEvent;
 use crate::components::PlayerControlled;
 
@@ -11,9 +10,10 @@ pub fn keyboard_handler(
     player_controlled: Query<Entity, With<PlayerControlled>>,
 ) {
     if keys.just_pressed(KeyCode::Space) {
-        turn_commands.send(TurnCommandEvent {
-            command: TurnCommand::EndTurn(EndTurn),
-            team: player_controlled.get_single().ok(),
-        });
+        // TODO: Add this back in
+        // turn_commands.send(TurnCommandEvent {
+        //     command: TurnCommand::EndTurn(EndTurn),
+        //     team: player_controlled.get_single().ok(),
+        // });
     }
 }

@@ -1,6 +1,6 @@
-use crate::commands::Attack;
+//use crate::commands::MoveAndAttack;
 use crate::commands::MoveEntity;
-use crate::commands::TurnCommand;
+//use crate::commands::TurnCommand;
 use crate::commands::TurnCommandEvent;
 use crate::components::*;
 use crate::systems::CurrentTurn;
@@ -58,13 +58,14 @@ pub fn click_handler(
                     }
                 } else {
                     for entity in selected_query.iter_mut() {
-                        turn_commands.send(TurnCommandEvent {
-                            command: TurnCommand::Attack(Attack {
-                                from: *coordinates_query.get(entity).unwrap(),
-                                to: coordinates,
-                            }),
-                            team: player_controlled.get_single().ok(),
-                        });
+                        // TODO: Add this back in
+                        // turn_commands.send(TurnCommandEvent {
+                        //     command: TurnCommand::MoveAndAttack(MoveAndAttack {
+                        //         from: *coordinates_query.get(entity).unwrap(),
+                        //         to: coordinates,
+                        //     }),
+                        //     team: player_controlled.get_single().ok(),
+                        // });
                     }
                 }
             } else {
@@ -83,7 +84,7 @@ pub fn click_handler(
             if selected_query.iter().into_iter().count() > 0 {
                 for entity in selected_query.iter_mut() {
                     turn_commands.send(TurnCommandEvent {
-                        command: TurnCommand::MoveEntity(MoveEntity {
+                        command: Box::new(MoveEntity {
                             from: *coordinates_query.get(entity).unwrap(),
                             to: coordinates,
                         }),

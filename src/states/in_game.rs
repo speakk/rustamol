@@ -2,6 +2,7 @@ use crate::bundles;
 use crate::bundles::UnitType;
 use crate::commands::Attack;
 use crate::commands::EndTurn;
+use crate::commands::MoveAndAttack;
 use crate::commands::MoveEntity;
 use crate::commands::TurnCommandEvent;
 use crate::components::*;
@@ -29,10 +30,11 @@ impl Plugin for StatePlugin {
                 .with_system(systems::end_turn)
                 .with_system(systems::find_path_hilight)
                 .with_system(systems::keyboard_handler)
-                .with_system(systems::turn_command)
+                .with_system(systems::system_build().exclusive_system())
                 .with_system(systems::move_entity)
                 .with_system(systems::ai)
                 .with_system(systems::attack)
+                .with_system(systems::move_and_attack)
                 .with_system(systems::path_hilight)
                 .with_system(systems::handle_hex_occupants)
                 .with_system(update_team_text),
@@ -42,6 +44,7 @@ impl Plugin for StatePlugin {
         .add_event::<MoveEntity>()
         .add_event::<EndTurn>()
         .add_event::<Attack>()
+        .add_event::<MoveAndAttack>()
         .add_event::<systems::turn::StartTurn>()
         .add_event::<systems::turn::TurnStarted>();
 

@@ -1,21 +1,38 @@
 use crate::components::*;
 use bevy::ecs::entity::Entity;
+use bevy::ecs::world::World;
 
 pub struct TurnCommandEvent {
-    pub command: TurnCommand,
+    pub command: Box<dyn CommandLike>,
     pub team: Option<Entity>,
 }
 
-pub enum TurnCommand {
-    MoveEntity(MoveEntity),
-    EndTurn(EndTurn),
-    Attack(Attack),
+// unsafe impl Sync for TurnCommandEvent {}
+// unsafe impl Send for TurnCommandEvent {}
+
+// pub struct TurnCommandEvent {
+//     pub command: TurnCommand,
+//     pub team: Option<Entity>,
+// }
+//
+// pub struct TurnCommandFinishedEvent {
+//     pub command: TurnCommand,
+// }
+
+// pub enum TurnCommand {
+//     MoveEntity(MoveEntity),
+//     // EndTurn(EndTurn),
+//     // Attack(Attack),
+//     // MoveAndAttack(MoveAndAttack),
+// }
+
+pub enum TurnCommandResult {
+    Success,
+    Failure,
 }
 
-#[derive(Debug, Copy, Clone)]
-pub struct MoveEntity {
-    pub from: Coordinates,
-    pub to: Coordinates,
+pub trait CommandLike: Send + Sync {
+    fn execute(&self, world: &mut World) -> TurnCommandResult;
 }
 
 #[derive(Debug, Copy, Clone)]
@@ -25,4 +42,13 @@ pub struct Attack {
 }
 
 #[derive(Debug, Copy, Clone)]
+pub struct MoveAndAttack {
+    pub from: Coordinates,
+    pub to: Coordinates,
+}
+
+#[derive(Debug, Copy, Clone)]
 pub struct EndTurn;
+
+pub mod move_entity;
+pub use move_entity::*;

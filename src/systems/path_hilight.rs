@@ -47,7 +47,7 @@ pub fn find_path_hilight(
                 if let Some(path) = path {
                     *hilighted_path = Some(path);
                 } else {
-                    *hilighted_path = None;
+                    //*hilighted_path = None;
                 }
             }
         }

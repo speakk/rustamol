@@ -6,3 +6,9 @@ pub fn attack(mut events: EventReader<Attack>) {
         println!("Attack!");
     }
 }
+
+pub fn move_and_attack(mut events: EventReader<MoveAndAttack>) {
+    for event in events.iter() {
+        println!("Attack!");
+    }
+}

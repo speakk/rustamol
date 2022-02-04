@@ -79,6 +79,21 @@ pub struct PlayerControlled;
 pub struct AiControlled;
 
 #[derive(Component)]
+pub struct Health {
+    pub value: f32,
+    pub max_value: f32,
+}
+
+impl Health {
+    pub fn new(value: f32) -> Health {
+        Health {
+            value,
+            max_value: value,
+        }
+    }
+}
+
+#[derive(Component)]
 pub struct IsInTeam {
     pub team: Entity,
 }

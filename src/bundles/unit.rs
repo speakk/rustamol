@@ -1,9 +1,4 @@
-use crate::components::AddHandle;
-use crate::components::ColorFade;
-use crate::components::Coordinates;
-use crate::components::Layer;
-use crate::components::Origin;
-use crate::components::ZOrder;
+use crate::components::*;
 use crate::states::BundleType;
 use bevy::ecs::bundle::Bundle;
 use bevy::prelude::*;
@@ -19,6 +14,7 @@ pub struct Unit {
     pub color_fade: ColorFade,
     pub unit: components::Unit,
     pub origin: Origin,
+    pub health: Health,
     pub add_handle: AddHandle,
     pub z_order: ZOrder,
 }
@@ -43,6 +39,10 @@ impl Unit {
                     UnitType::Stabby => BundleType::Stabby,
                 },
             },
+            health: Health::new(match unit_type {
+                UnitType::Skelly => 3.,
+                UnitType::Stabby => 4.,
+            }),
             z_order: ZOrder,
         }
     }
