@@ -11,7 +11,7 @@ pub struct TurnStarted {
     pub team: Entity,
 }
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct CurrentTurn(pub Option<Entity>);
 
 pub fn start_turn(
@@ -21,6 +21,7 @@ pub fn start_turn(
 ) {
     for event in events.iter() {
         *current_turn = CurrentTurn(Some(event.team));
+        println!("Got a turn start... ?, {:?}", current_turn);
         turn_started.send(TurnStarted {
             team: current_turn
                 .0

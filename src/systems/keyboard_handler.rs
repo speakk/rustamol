@@ -10,10 +10,9 @@ pub fn keyboard_handler(
     player_controlled: Query<Entity, With<PlayerControlled>>,
 ) {
     if keys.just_pressed(KeyCode::Space) {
-        // TODO: Add this back in
-        // turn_commands.send(TurnCommandEvent {
-        //     command: TurnCommand::EndTurn(EndTurn),
-        //     team: player_controlled.get_single().ok(),
-        // });
+        turn_commands.send(TurnCommandEvent {
+            command: Box::new(EndTurn),
+            team: player_controlled.get_single().ok(),
+        });
     }
 }

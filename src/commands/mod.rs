@@ -7,25 +7,6 @@ pub struct TurnCommandEvent {
     pub team: Option<Entity>,
 }
 
-// unsafe impl Sync for TurnCommandEvent {}
-// unsafe impl Send for TurnCommandEvent {}
-
-// pub struct TurnCommandEvent {
-//     pub command: TurnCommand,
-//     pub team: Option<Entity>,
-// }
-//
-// pub struct TurnCommandFinishedEvent {
-//     pub command: TurnCommand,
-// }
-
-// pub enum TurnCommand {
-//     MoveEntity(MoveEntity),
-//     // EndTurn(EndTurn),
-//     // Attack(Attack),
-//     // MoveAndAttack(MoveAndAttack),
-// }
-
 pub enum TurnCommandResult {
     Success,
     Failure,
@@ -47,8 +28,8 @@ pub struct MoveAndAttack {
     pub to: Coordinates,
 }
 
-#[derive(Debug, Copy, Clone)]
-pub struct EndTurn;
-
 pub mod move_entity;
 pub use move_entity::*;
+
+pub mod end_turn;
+pub use end_turn::*;

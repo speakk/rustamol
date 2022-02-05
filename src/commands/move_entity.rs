@@ -45,6 +45,3 @@ impl CommandLike for MoveEntity {
         TurnCommandResult::Failure
     }
 }
-
-// pub fn move_entity(world: &mut World, from: Coordinates, to: Coordinates) -> TurnCommandResult {
-// }
